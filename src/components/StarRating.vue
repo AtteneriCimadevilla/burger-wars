@@ -1,0 +1,60 @@
+<script>
+export default {
+    props: {
+        rating: {
+            type: Number,
+            required: true
+        },
+        maxRating: {
+            type: Number,
+            default: 10
+        }
+    },
+    computed: {
+        filledStars() {
+            return (this.rating / this.maxRating) * 10;
+        }
+    }
+}
+</script>
+
+<template>
+  <div class="star-rating">
+    <span v-for="n in 10" :key="n" class="star" :class="{ 'filled': n <= filledStars, 'half-filled': n === Math.ceil(filledStars) && !Number.isInteger(filledStars) }">
+      ★
+    </span>
+  </div>
+</template>
+
+<style scoped>
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+}
+.star {
+  font-size: 24px;
+  color: #e4e5e9;
+}
+.star.filled {
+  color: #ffd700;
+}
+.star.half-filled {
+  position: relative;
+  color: #e4e5e9;
+}
+.star.half-filled::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #ffd700;
+}
+
+@media screen and (max-width: 600px) {
+  .star {
+    font-size: 14px;
+  }
+}
+</style>
