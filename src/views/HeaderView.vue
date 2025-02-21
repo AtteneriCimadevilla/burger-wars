@@ -25,10 +25,15 @@ header {
     align-items: center;
     justify-items: right;
     background-color: var(--accent-color-2);
-    padding-left: 10px;
+    padding: 10px;
 }
-
 .logo {
     height: 15vh;
+}
+
+@media only screen and (max-width: 550px) {
+    header {
+        padding: 0 70px;
+    }
 }
 </style>

@@ -24,4 +24,15 @@ a {
     text-decoration: none;
     justify-self: center;
 }
+
+@media only screen and (max-width: 550px) {
+    nav {
+        flex-direction: column;
+        row-gap: 10px;
+    }
+    nav a {
+        font-size: 0.7rem;
+    }
+    
+}
 </style>
