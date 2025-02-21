@@ -1,0 +1,34 @@
+<script>
+import MenuComponent from '../components/MenuComponent.vue';
+
+export default {
+    components: {
+        MenuComponent
+    }
+}
+</script>
+
+<template>
+    <header>
+        <RouterLink to="/">
+            <img class="logo" src="/img/logo.png" alt="Home" />
+        </RouterLink>
+        <MenuComponent />
+    </header>
+</template>
+
+<style scoped>
+header {
+    height: 20vh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-items: right;
+    background-color: var(--accent-color-2);
+    padding-left: 10px;
+}
+
+.logo {
+    height: 15vh;
+}
+</style>
