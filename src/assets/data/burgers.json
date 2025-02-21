@@ -1,0 +1,162 @@
+[
+    {
+        "id": "001",
+        "name": "Brisket Burger",
+        "restaurant": "001",
+        "main_ingredient": "brisket",
+        "amount": 200,
+        "bread": "brioche",
+        "ingredients": "cheddar cheese, caramelized onions, BBQ sauce",
+        "price": 12,
+        "ratings": {
+            "taste": 10,
+            "presentation": 8,
+            "quality_price": 8
+        },
+        "image": "/img/001.jpg"
+    },
+    {
+        "id": "002",
+        "name": "La Smash",
+        "restaurant": "001",
+        "main_ingredient": "carne de res",
+        "amount": 180,
+        "bread": "brioche",
+        "ingredients": "queso americano, cebolla, pepinillos, salsa especial",
+        "price": 11,
+        "ratings": {
+            "taste": 9,
+            "presentation": 8,
+            "quality_price": 8
+        },
+        "image": "/img/002.jpg"
+    },
+    {
+        "id": "003",
+        "name": "La Smoke",
+        "restaurant": "001",
+        "main_ingredient": "carne de res",
+        "amount": 200,
+        "bread": "pan de semillas",
+        "ingredients": "queso ahumado, bacon, cebolla caramelizada, salsa BBQ",
+        "price": 12,
+        "ratings": {
+            "taste": 10,
+            "presentation": 9,
+            "quality_price": 9
+        },
+        "image": "/img/003.jpg"
+    },
+    {
+        "id": "004",
+        "name": "Guaca-Chicken",
+        "restaurant": "001",
+        "main_ingredient": "pollo a la parrilla",
+        "amount": 150,
+        "bread": "integral",
+        "ingredients": "guacamole, lechuga, tomate, cebolla roja, avocado",
+        "price": 10,
+        "ratings": {
+            "taste": 8,
+            "presentation": 8,
+            "quality_price": 8
+        },
+        "image": "/img/004.jpg"
+    },
+    {
+        "id": "005",
+        "name": "Big Texan",
+        "restaurant": "003",
+        "main_ingredient": "carne de res",
+        "amount": 220,
+        "bread": "pan clásico",
+        "ingredients": "queso cheddar, bacon, jalapeños, salsa BBQ",
+        "price": 13,
+        "ratings": {
+            "taste": 9,
+            "presentation": 9,
+            "quality_price": 8
+        },
+        "image": "/img/005.jpg"
+    },
+    {
+        "id": "006",
+        "name": "Truffle Burger",
+        "restaurant": "004",
+        "main_ingredient": "carne de res",
+        "amount": 200,
+        "bread": "pan brioche",
+        "ingredients": "queso brie, rúcula, mayonesa de trufa, cebolla caramelizada",
+        "price": 14,
+        "ratings": {
+            "taste": 10,
+            "presentation": 9,
+            "quality_price": 8
+        },
+        "image": "/img/006.jpg"
+    },
+    {
+        "id": "007",
+        "name": "Veggie Deluxe",
+        "restaurant": "005",
+        "main_ingredient": "garbanzos y espinacas",
+        "amount": 150,
+        "bread": "pan integral",
+        "ingredients": "queso feta, tomate seco, cebolla caramelizada, salsa de yogur",
+        "price": 10,
+        "ratings": {
+            "taste": 8,
+            "presentation": 8,
+            "quality_price": 8
+        },
+        "image": "/img/007.jpg"
+    },
+    {
+        "id": "008",
+        "name": "Pulled Pork Burger",
+        "restaurant": "006",
+        "main_ingredient": "cerdo desmenuzado",
+        "amount": 200,
+        "bread": "pan de patata",
+        "ingredients": "queso gouda, coleslaw, salsa BBQ",
+        "price": 12,
+        "ratings": {
+            "taste": 9,
+            "presentation": 9,
+            "quality_price": 8
+        },
+        "image": "/img/008.jpg"
+    },
+    {
+        "id": "009",
+        "name": "Mexicana",
+        "restaurant": "007",
+        "main_ingredient": "carne de res",
+        "amount": 200,
+        "bread": "pan brioche",
+        "ingredients": "queso cheddar, guacamole, pico de gallo, jalapeños, aguacate, avocado",
+        "price": 11,
+        "ratings": {
+            "taste": 9,
+            "presentation": 8,
+            "quality_price": 9
+        },
+        "image": "/img/009.jpg"
+    },
+    {
+        "id": "010",
+        "name": "Mediterránea",
+        "restaurant": "008",
+        "main_ingredient": "carne de res",
+        "amount": 200,
+        "bread": "pan rústico",
+        "ingredients": "queso de cabra, rúcula, tomate seco, alioli",
+        "price": 13,
+        "ratings": {
+            "taste": 9,
+            "presentation": 9,
+            "quality_price": 8
+        },
+        "image": "/img/010.jpg"
+    }
+]
