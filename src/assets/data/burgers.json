@@ -97,66 +97,66 @@
     },
     {
         "id": "007",
-        "name": "Veggie Deluxe",
-        "restaurant": "005",
-        "main_ingredient": "chickpeas and spinach",
-        "amount": 150,
-        "bread": "whole grain bread",
-        "ingredients": "feta cheese, sun-dried tomato, caramelized onion, yogurt sauce",
-        "price": 10,
+        "name": "Smokehouse",
+        "restaurant": "012",
+        "main_ingredient": "beef",
+        "amount": 180,
+        "bread": "artisanal bread",
+        "ingredients": "smoked cheese, bacon, chipotle cream, crunchy onion, mesclun, tomato, honey mustard sauce",
+        "price": 13.50,
         "ratings": {
             "taste": 8,
             "presentation": 8,
             "quality_price": 8
         },
-        "image": "/img/007.jpg"
+        "image": "/img/007.png"
     },
     {
         "id": "008",
-        "name": "Pulled Pork Burger",
-        "restaurant": "006",
-        "main_ingredient": "pulled pork",
-        "amount": 200,
-        "bread": "potato bread",
-        "ingredients": "gouda cheese, coleslaw, BBQ sauce",
-        "price": 12,
+        "name": "Cherokee Bourbon",
+        "restaurant": "012",
+        "main_ingredient": "beef",
+        "amount": 180,
+        "bread": "artisanal bread",
+        "ingredients": "bourbon sauce, emmenthal cheese, blue cheese, bacon, mesclun, honey mustard sauce, tomato",
+        "price": 12.50,
         "ratings": {
             "taste": 9,
             "presentation": 9,
             "quality_price": 8
         },
-        "image": "/img/008.jpg"
+        "image": "/img/008.png"
     },
     {
         "id": "009",
-        "name": "Mexicana",
+        "name": "Cordero Burger",
         "restaurant": "007",
-        "main_ingredient": "beef",
-        "amount": 200,
-        "bread": "brioche",
-        "ingredients": "cheddar cheese, guacamole, pico de gallo, jalapeños, avocado",
-        "price": 11,
+        "main_ingredient": "leg of lamb, double minced",
+        "amount": 170,
+        "bread": "baker's bread",
+        "ingredients": "fresh artisan cheese, za'atar, rocket, lemon, lettuce, A+ tomato, thinly sliced onion, sundried tomato mayo",
+        "price": 13,
         "ratings": {
-            "taste": 9,
-            "presentation": 8,
+            "taste": 10,
+            "presentation": 9,
             "quality_price": 9
         },
-        "image": "/img/009.jpg"
+        "image": "/img/009.png"
     },
     {
         "id": "010",
-        "name": "Mediterranean",
-        "restaurant": "008",
-        "main_ingredient": "beef",
-        "amount": 200,
-        "bread": "rustic bread",
-        "ingredients": "goat cheese, rocket, sun-dried tomato, aioli",
+        "name": "Brie Burger",
+        "restaurant": "013",
+        "main_ingredient": "Avila beef, double minced daily",
+        "amount": 180,
+        "bread": "baker's bread",
+        "ingredients": "Brie de Meaux, roasted cherry tomato, smoked ham from Ourense, basil mayo, thinly sliced onion, lollo rosso lettuce",
         "price": 13,
         "ratings": {
-            "taste": 9,
+            "taste": 10,
             "presentation": 9,
-            "quality_price": 8
+            "quality_price": 9
         },
-        "image": "/img/010.jpg"
+        "image": "/img/010.png"
     }
 ]

@@ -27,8 +27,10 @@ export default {
     <div v-if="currentRestaurant" class="restaurant-details">
         <div class="restaurantHeader">
             <h3>{{ currentRestaurant.name }}</h3>
+            <a :href="currentRestaurant.website" class="link">{{ currentRestaurant.website }}</a>
             <iframe :src="currentRestaurant.url" frameborder="0" class="map"></iframe>
             <p>{{ currentRestaurant.address }}</p>
+
         </div>
 
         <div class="itemsList">
@@ -61,6 +63,9 @@ export default {
     justify-items: center;
     text-align: center;
     color: var(--accent-color-2);
+}
+.link {
+    margin-top: 5px;
 }
 .map {
     margin: 10px;
