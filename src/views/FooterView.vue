@@ -3,7 +3,7 @@
 
 <template>
     <footer>
-        <p>&copy; Atteneri Cimadevilla 2024 - Todos los derechos reservados.</p>
+        <p class="copyright">&copy; Atteneri Cimadevilla 2024 - Todos los derechos reservados.</p>
     </footer>
 </template>
 
@@ -22,5 +22,11 @@ footer {
     background-color: var(--accent-color-2);
     color: var(--accent-color-1);
     padding: 5px;
+}
+
+@media only screen and (max-width: 550px) {
+    .copyright {
+        font-size: 0.8rem;
+    }
 }
 </style>

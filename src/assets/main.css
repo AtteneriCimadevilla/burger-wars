@@ -59,16 +59,20 @@ a {
 }
 
 .itemCard:hover {
-    background-color: var(--accent-color-2);
+    background-color: var(--accent-color-1);
+    img {
+        border: 3px solid var(--accent-color-2);
+    }
 }
 
 .itemCard img {
     width: 200px;
     margin-top: 5px;
+    margin-bottom: 10px;
     border-radius: 10px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 550px) {
     .itemsList {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
@@ -79,5 +83,8 @@ a {
 
     .itemCard img {
         width: 120px;
+    }
+    .itemCard h3 {
+        font-size: 1rem;
     }
 }

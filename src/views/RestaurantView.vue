@@ -27,8 +27,8 @@ export default {
     <div v-if="currentRestaurant" class="restaurant-details">
         <div class="restaurantHeader">
             <h3>{{ currentRestaurant.name }}</h3>
-            <p>{{ currentRestaurant.description }}</p>
-            <iframe :src="currentRestaurant.url" frameborder="0"></iframe>
+            <iframe :src="currentRestaurant.url" frameborder="0" class="map"></iframe>
+            <p>{{ currentRestaurant.address }}</p>
         </div>
 
         <div class="itemsList">
@@ -36,7 +36,7 @@ export default {
                 <RouterLink :to="`/burger/${burger.id}`">
                     <h3>{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
-                    <StarRating :rating="burger.rating" :maxrating="10"/>
+                    <StarRating :rating="burger.rating" :maxrating="10" />
                 </RouterLink>
             </div>
         </div>
@@ -61,5 +61,12 @@ export default {
     justify-items: center;
     text-align: center;
     color: var(--accent-color-2);
+}
+.map {
+    margin: 10px;
+    border: 3px solid var(--accent-color-2);
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
 }
 </style>

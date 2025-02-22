@@ -21,9 +21,8 @@ export default {
 <template>
     <div>
         <div class="mainHeader">
-            <h2>
-                List of Restaurants
-            </h2>
+            <h3 v-if="!search">All the restaurants</h3>
+            <h3 v-else>Filtered restaurants</h3>
             <div class="searchInput">
                 <input type="text" v-model="search" placeholder="Search...">
             </div>
@@ -43,6 +42,7 @@ export default {
 <style scoped>
 .mainHeader {
     margin: 20px;
+    padding-right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -63,35 +63,24 @@ export default {
     border: 2px solid var(--accent-color-2);
     border-radius: 5px;
 }
-
-.itemsList {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    align-items: center;
-    justify-items: center;
-    margin-bottom: 10px;
+.searchInput input:focus {
+    outline: none;
+    /* Remove default focus outline */
+    border-color: var(--accent-color-1);
+    /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(var(--accent-color-1-rgb), 0.5);
+    /* Optional: add a subtle glow effect */
 }
 
-.itemCard {
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-items: center;
-    margin: 5px;
-    padding: 10px;
-    border: 3px solid var(--accent-color-2);
-    border-radius: 10px;
-    box-shadow: 1px 1px var(--accent-color-2);
-}
-.itemCard:hover {
-    background-color: var(--accent-color-2);
-}
+@media only screen and (max-width: 550px) {
+    .mainHeader {
+        display: grid;
+        grid-template-columns: 1fr auto;
+    }
 
-.itemCard img {
-    width: 150px;
-    margin-top: 5px;
-    border-radius: 10px;
+    .searchInput input {
+        width: 80%;
+    }
+
 }
 </style>

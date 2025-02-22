@@ -36,7 +36,7 @@ export default {
   color: #e4e5e9;
 }
 .star.filled {
-  color: #ffd700;
+  color: var(--logo-color);
 }
 .star.half-filled {
   position: relative;
@@ -49,7 +49,7 @@ export default {
   top: 0;
   width: 50%;
   overflow: hidden;
-  color: #ffd700;
+  color: var(--logo-color);
 }
 
 @media screen and (max-width: 600px) {

@@ -45,18 +45,18 @@ export default {
                 <p>{{ currentBurger.amount }}g. {{ currentBurger.main_ingredient }}</p>
                 <p>{{ currentBurger.bread }}</p>
                 <p>with {{ currentBurger.ingredients }}</p>
-                <p>Price: {{ currentBurger.price }} €</p>
-                <p>Taste rating: {{ currentBurger.ratings.taste }}</p>
-                <p>Presentation rating: {{ currentBurger.ratings.presentation }}</p>
-                <p>Quality/price rating: {{ currentBurger.ratings.quality_price }}</p>
+                <p>price: {{ currentBurger.price }} €</p>
+                <p>taste rating: {{ currentBurger.ratings.taste }}</p>
+                <p>presentation rating: {{ currentBurger.ratings.presentation }}</p>
+                <p>quality/price rating: {{ currentBurger.ratings.quality_price }}</p>
             </div>
         </div>
-        <div v-if="currentRestaurant" class="restaurantInfo">
-            <RouterLink :to="`/restaurant/${currentRestaurant.id}`">
+        <RouterLink :to="`/restaurant/${currentRestaurant.id}`">
+            <div v-if="currentRestaurant" class="restaurantInfo">
                 <img :src="currentRestaurant.image" :alt="currentRestaurant.name">
                 <h3>{{ currentRestaurant.name }}</h3>
-            </RouterLink>
-        </div>
+            </div>
+        </RouterLink>
     </div>
     <div v-else class="error-message">
         <p>Burger not found</p>
@@ -90,6 +90,12 @@ export default {
     color: var(--accent-color-2);
     height: fit-content;
 }
+.itemCard:hover {
+    background-color: var(--background-color);
+    img {
+        border: none;
+    }
+}
 
 .burgerHeader img {
     max-width: 200px;
@@ -122,6 +128,13 @@ export default {
     padding: 20px;
 }
 
+.restaurantInfo:hover {
+    background-color: var(--accent-color-1);
+    img {
+        border: 3px solid var(--accent-color-2);
+    }
+}
+
 .restaurantInfo img {
     width: 150px;
     border-radius: 10px;
@@ -137,9 +150,8 @@ export default {
     .burgerMain {
         grid-template-columns: 1fr;
     }
-
-    .burgerDetails {
-        font-size: 4rem;
+    .burgerDetails>p {
+        font-size: 0.7rem;
     }
 }
 
@@ -148,18 +160,5 @@ export default {
         display: grid;
         grid-template-columns: 1fr auto;
     }
-
-    .burgerHeader img {
-        max-width: 300px;
-    }
-
-    .burgerDetails {
-        font-size: 1rem;
-    }
-
-    .restaurantInfo img {
-        width: 200px;
-    }
-
 }
 </style>

@@ -51,7 +51,8 @@ export default {
 
 <style scoped>
 .mainHeader {
-    margin: 20px;
+    margin: 20px 0 20px 20px;
+    padding-right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -61,11 +62,8 @@ export default {
     gap: 10px;
     /* This adds space between wrapped items */
 }
-.mainHeader h3 {
-    color: var(--accent-color-2);
-}
 .mainHeader span {
-    color: var(--accent-color-1);
+    color: var(--text-color);
 }
 
 .searchInput {
@@ -85,5 +83,16 @@ export default {
     /* Change border color on focus */
     box-shadow: 0 0 5px rgba(var(--accent-color-1-rgb), 0.5);
     /* Optional: add a subtle glow effect */
+}
+
+@media only screen and (max-width: 550px) {
+    .mainHeader {
+        display: grid;
+        grid-template-columns: 1fr auto;
+    }
+    .searchInput input {
+        width: 80%;
+    }
+    
 }
 </style>
