@@ -41,7 +41,7 @@ export default {
 
 <style scoped>
 .mainHeader {
-    margin: 20px;
+    margin: 20px 0 20px 20px;
     padding-right: 0;
     display: flex;
     justify-content: space-between;
@@ -77,7 +77,6 @@ export default {
         display: grid;
         grid-template-columns: 1fr auto;
     }
-
     .searchInput input {
         width: 80%;
     }

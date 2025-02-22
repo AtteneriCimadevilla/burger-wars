@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="listOfBurgers">
         <div class="mainHeader">
             <h3 v-if="!search">
                 All the burgers
@@ -32,9 +32,7 @@ export default {
             <h3 v-else>
                 Burgers with <span>{{ search }}</span>
             </h3>
-            <div class="searchInput">
-                <input type="text" v-model="search" placeholder="Search...">
-            </div>
+            <input class="searchInput" type="text" v-model="search" placeholder="Search...">
         </div>
 
         <div class="itemsList">
@@ -42,7 +40,7 @@ export default {
                 <RouterLink :to="`/burger/${burger.id}`">
                     <h3>{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
-                    <StarRating :rating="burger.rating" maxrating="10"/>
+                    <StarRating :rating="burger.rating" maxrating="10" />
                 </RouterLink>
             </div>
         </div>
@@ -50,33 +48,34 @@ export default {
 </template>
 
 <style scoped>
+.listOfBurgers {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .mainHeader {
     margin: 20px 0 20px 20px;
-    padding-right: 0;
-    display: flex;
-    justify-content: space-between;
+    padding-right: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    /* This will vertically center the items */
-    flex-wrap: wrap;
-    /* This allows items to wrap on smaller screens */
     gap: 10px;
     /* This adds space between wrapped items */
 }
+
 .mainHeader span {
     color: var(--text-color);
 }
 
 .searchInput {
     margin-left: 20px;
-}
-
-.searchInput input {
     padding: 5px;
     width: 200px;
     border: 2px solid var(--accent-color-2);
     border-radius: 5px;
 }
-.searchInput input:focus {
+
+.searchInput:focus {
     outline: none;
     /* Remove default focus outline */
     border-color: var(--accent-color-1);
@@ -86,13 +85,11 @@ export default {
 }
 
 @media only screen and (max-width: 550px) {
-    .mainHeader {
-        display: grid;
-        grid-template-columns: 1fr auto;
+    h3 {
+        font-size: 1rem;
     }
-    .searchInput input {
+    .searchInput {
         width: 80%;
     }
-    
 }
 </style>

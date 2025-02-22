@@ -33,7 +33,7 @@ header {
 
 @media only screen and (max-width: 550px) {
     header {
-        padding: 0 70px;
+        padding: 0 30px;
     }
 }
 </style>
