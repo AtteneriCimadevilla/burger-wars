@@ -10,7 +10,7 @@ import Home from './components/Home.vue'
 import BurgerView from './views/BurgerView.vue'
 import RestaurantsView from './views/RestaurantsView.vue'
 import RestaurantView from './views/RestaurantView.vue'
-import ListOfBurgers from './components/ListOfBurgers.vue'
+import ListOfBurgers from './views/ListOfBurgers.vue'
 import AboutUsView from './views/AboutUsView.vue'
 
 burgers.forEach(burger => {

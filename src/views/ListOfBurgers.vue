@@ -1,5 +1,5 @@
 <script>
-import StarRating from './StarRating.vue';
+import StarRating from '../components/StarRating.vue';
 const burgersList = JSON.parse(localStorage.getItem('burgers'));
 
 export default {

@@ -69,23 +69,20 @@
 .aboutUsView {
     width: 80%;
     margin: 30px auto;
-}
-.aboutUsView p, li {
-    font-size: 0.8rem;
-    line-height: 1.5;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
 }
 
-.main-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+.aboutUsView p, li {
+    font-size: 0.7rem;
+    line-height: 1.5;
 }
 
 .aboutUsParagraph {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
-    margin-bottom: 20px;
     padding: 20px;
     border: 3px solid var(--accent-color-2);
     border-radius: 10px;
@@ -99,5 +96,12 @@
 }
 
 .github {
-font-size: 0.7rem;}
+font-size: 0.7rem;
+}
+
+@media only screen and (min-width: 1024px) {
+    .aboutUsView {
+        gap: 100px;
+    }
+}
 </style>

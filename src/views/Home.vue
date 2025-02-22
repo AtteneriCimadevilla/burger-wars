@@ -1,5 +1,5 @@
 <script>
-    import ListOfBurgers from './ListOfBurgers.vue';
+    import ListOfBurgers from '../views/ListOfBurgers.vue';
 
     export default {
         components: {
