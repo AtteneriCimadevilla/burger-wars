@@ -15,7 +15,8 @@ export default {
                 const matchesSearch = 
                     burger.name.toLowerCase().includes(this.search.toLowerCase())
                     || burger.ingredients.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.main_ingredient.toLowerCase().includes(this.search.toLowerCase());
+                    || burger.main_ingredient.toLowerCase().includes(this.search.toLowerCase())
+                    || burger.bread.toLowerCase().includes(this.search.toLowerCase());
                 return matchesSearch;
             });
         }
@@ -40,7 +41,7 @@ export default {
 
         <div class="itemsList">
             <div v-for="burger in filteredBurgers" :key="burger.id" class="itemCard">
-                <RouterLink :to="`/burger/${burger.id}`">
+                <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
                     <h3>{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
                     <StarRating :rating="burger.rating" maxrating="10" />
@@ -87,12 +88,37 @@ export default {
     /* Optional: add a subtle glow effect */
 }
 
-@media only screen and (max-width: 550px) {
+.itemCard {
+    height: 300px;
+}
+.itemLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemLink img {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.itemName {
+    text-align: center;
+    word-wrap: break-word;
+}
+
+@media only screen and (max-width: 750px) {
     h3 {
         font-size: 1rem;
     }
     .searchInput {
         width: 80%;
+    }
+    .itemCard {
+        height: 200px;
     }
 }
 </style>

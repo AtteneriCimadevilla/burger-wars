@@ -29,6 +29,12 @@ h3 {
     font-weight: 600;
     color: var(--accent-color-2);
 }
+h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-color-2);
+    justify-self: center;
+}
 
 a {
     text-decoration: none;
@@ -48,12 +54,13 @@ a {
 
 .itemCard {
     width: 250px;
+    height: 280px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-items: center;
     margin: 5px;
-    padding: 10px;
+    padding: 10px 5px;
     border: 3px solid var(--accent-color-2);
     border-radius: 10px;
     box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
@@ -74,13 +81,14 @@ a {
     border-radius: 10px;
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 750px) {
     .itemsList {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 
     .itemCard {
         width: 150px;
+        height: 210px;
     }
 
     .itemCard img {

@@ -19,7 +19,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="listOfRestaurants">
         <div class="mainHeader">
             <h3 v-if="!search">All the restaurants</h3>
             <h3 v-else>Filtered restaurants</h3>
@@ -30,9 +30,9 @@ export default {
 
         <div class="itemsList">
             <div v-for="restaurant in filteredRestaurants" :key="restaurant.id" class="itemCard">
-                <RouterLink :to="`/restaurant/${restaurant.id}`">
+                <RouterLink :to="`/restaurant/${restaurant.id}`" class="itemLink">
                     <img :src="restaurant.image" :alt="restaurant.name">
-                    <h3>{{ restaurant.name }}</h3>
+                    <h4 class="itemName">{{ restaurant.name }}</h4>
                 </RouterLink>
             </div>
         </div>
@@ -40,6 +40,10 @@ export default {
 </template>
 
 <style scoped>
+.listOfRestaurants {
+    width: 90%;
+    margin: 0 auto;
+}
 .mainHeader {
     margin: 20px 0 20px 20px;
     padding-right: 0;
@@ -81,5 +85,22 @@ export default {
         width: 80%;
     }
 
+}
+
+.itemLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.itemLink img {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.itemName {
+    text-align: center;
+    word-wrap: break-word;
 }
 </style>

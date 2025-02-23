@@ -24,9 +24,7 @@ footer {
     padding: 5px;
 }
 
-@media only screen and (max-width: 550px) {
-    .copyright {
-        font-size: 0.8rem;
-    }
+.copyright {
+    font-size: 0.8rem;
 }
 </style>
