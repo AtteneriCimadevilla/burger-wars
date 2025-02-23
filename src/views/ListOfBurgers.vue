@@ -15,8 +15,9 @@ export default {
                 const matchesSearch = 
                     burger.name.toLowerCase().includes(this.search.toLowerCase())
                     || burger.ingredients.toLowerCase().includes(this.search.toLowerCase())
+                    || burger.bread.toLowerCase().includes(this.search.toLowerCase())
                     || burger.main_ingredient.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.bread.toLowerCase().includes(this.search.toLowerCase());
+                    || (burger.more_ingredients && burger.more_ingredients.toLowerCase().includes(this.search.toLowerCase()));   
                 return matchesSearch;
             });
         }
@@ -53,7 +54,7 @@ export default {
 
 <style scoped>
 .listOfBurgers {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
 }
 
@@ -110,7 +111,7 @@ export default {
     word-wrap: break-word;
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 550px) {
     h3 {
         font-size: 1rem;
     }
@@ -120,5 +121,10 @@ export default {
     .itemCard {
         height: 200px;
     }
+}
+@media only screen and (max-width: 420px) {
+.listOfBurgers {
+    width: 98%;
+}
 }
 </style>

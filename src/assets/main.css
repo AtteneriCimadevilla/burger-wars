@@ -81,7 +81,26 @@ a {
     border-radius: 10px;
 }
 
-@media screen and (max-width: 750px) {
+.itemLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemLink img {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.itemName {
+    text-align: center;
+    word-wrap: break-word;
+}
+
+@media screen and (max-width: 550px) {
     .itemsList {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }

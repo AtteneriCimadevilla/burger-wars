@@ -74,7 +74,6 @@ export default {
     margin: 20px;
     display: grid;
     grid-template-columns: auto 1fr;
-
     border: 3px solid var(--accent-color-2);
     border-radius: 10px;
     box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
@@ -107,10 +106,9 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: left;
-    margin: 20px;
+    margin: 40px 20px 10px 20px;
     max-width: 600px;
     border-radius: 10px;
-    padding: 10px;
     color: var(--accent-color-2);
 }
 
@@ -150,6 +148,12 @@ export default {
 @media only screen and (max-width: 500px) {
     .burgerMain {
         grid-template-columns: 1fr;
+    }
+    .burgerHeader {
+        margin-bottom: 0;
+    }
+    .burgerDetails {
+        margin-top: 10px;
     }
     .burgerDetails>p {
         font-size: 0.7rem;

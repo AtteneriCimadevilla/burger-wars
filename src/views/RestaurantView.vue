@@ -35,8 +35,8 @@ export default {
 
         <div class="itemsList">
             <div v-for="burger in currentRestaurantBurgers" :key="burger.id" class="itemCard">
-                <RouterLink :to="`/burger/${burger.id}`">
-                    <h3>{{ burger.name }}</h3>
+                <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
+                    <h3 class="itemName">{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
                     <StarRating :rating="burger.rating" :maxrating="10" />
                 </RouterLink>
@@ -73,5 +73,11 @@ export default {
     border-radius: 10px;
     box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s;
+}
+.itemCard {
+    height: 290px;
+    @media only screen and (max-width: 550px) {
+        height: 200px;
+    }
 }
 </style>
