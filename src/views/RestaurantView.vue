@@ -26,6 +26,7 @@ export default {
 <template>
     <div v-if="currentRestaurant" class="restaurant-details">
         <div class="restaurantHeader">
+            <img class="miniLogo" :src="currentRestaurant.image" alt="currentRestaurant.name">
             <h3>{{ currentRestaurant.name }}</h3>
             <a :href="currentRestaurant.website" class="link">{{ currentRestaurant.website }}</a>
             <iframe :src="currentRestaurant.url" frameborder="0" class="map"></iframe>
@@ -33,7 +34,7 @@ export default {
 
         </div>
 
-        <div class="itemsList">
+        <div v-if="currentRestaurantBurgers.length" class="itemsList">
             <div v-for="burger in currentRestaurantBurgers" :key="burger.id" class="itemCard">
                 <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
                     <h3 class="itemName">{{ burger.name }}</h3>
@@ -41,6 +42,9 @@ export default {
                     <StarRating :rating="burger.rating" :maxrating="10" />
                 </RouterLink>
             </div>
+        </div>
+        <div v-else class="error-message">
+            <p>No burgers from this restaurant yet.</p>
         </div>
     </div>
     <div v-else class="error-message">
@@ -63,6 +67,11 @@ export default {
     justify-items: center;
     text-align: center;
     color: var(--accent-color-2);
+}
+.miniLogo {
+    width: 70px;
+    border-radius: 10%;
+    margin-bottom: 10px;
 }
 .link {
     margin-top: 5px;
