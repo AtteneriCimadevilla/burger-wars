@@ -34,7 +34,7 @@
         "id": "003",
         "name": "Circo",
         "restaurant": "002",
-        "main_ingredient": "vaca vieja beef",
+        "main_ingredient": "'Vaca Vieja' Beef",
         "amount": 200,
         "bread": "brioche bun",
         "ingredients": "Batavia Lettuce, Fresh Tomato, Red Onion, English Cheddar Cheese, CIRCO Sauce",
@@ -153,5 +153,50 @@
             "quality_price": 9
         },
         "image": "/img/010.png"
+    },
+    {
+        "id": "011",
+        "name": "Campiña",
+        "restaurant": "002",
+        "main_ingredient": "Organic Mushroom Burger",
+        "bread": "Brioche",
+        "ingredients": "Melted Havarti Cheese, Tomato, Truffled Mayonnaise",
+        "price": 12,
+        "ratings": {
+            "taste": 8,
+            "presentation": 7,
+            "quality_price": 8
+        },
+        "image": "/img/011.png"
+    },
+    {
+        "id": "012",
+        "name": "Viva México 2.0",
+        "restaurant": "002",
+        "main_ingredient": "'Vaca Vieja' Beef",
+        "bread": "Brioche",
+        "ingredients": "Smoked White Cheddar, Fresh Guacamole, Pico de Gallo, Chilli Mayo",
+        "price": 13.5,
+        "ratings": {
+            "taste": 9,
+            "presentation": 9,
+            "quality_price": 8
+        },
+        "image": "/img/012.png"
+    },
+    {
+        "id": "013",
+        "name": "Don Lucio",
+        "restaurant": "002",
+        "main_ingredient": "'Vaca Vieja' Beef",
+        "bread": "Brioche",
+        "ingredients": "Smoked White Cheddar, Txistorra Bits, Fried Egg, Crispy Straw Potatoes, 'Don Lucio' Mayo",
+        "price": 13.9,
+        "ratings": {
+            "taste": 9,
+            "presentation": 9,
+            "quality_price": 8
+        },
+        "image": "/img/013.png"
     }
 ]
