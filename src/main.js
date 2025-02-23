@@ -15,7 +15,7 @@ import AboutUsView from './views/AboutUsView.vue'
 import ContactView from './views/Contact.vue'
 
 burgers.forEach(burger => {
-    burger.rating = Math.round((burger.ratings.taste + burger.ratings.presentation + burger.ratings.quality_price) / 3 * 100) / 100.00
+    burger.rating = Math.round((burger.ratings.taste + burger.ratings.presentation + burger.ratings.quality_price) / 3 * 100) / 100.00;
 });
 
 burgers.sort((a, b) => b.rating - a.rating);

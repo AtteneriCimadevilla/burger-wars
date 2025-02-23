@@ -12,7 +12,10 @@ export default {
     computed: {
         filteredBurgers() {
             return this.burgers.filter(burger => {
-                const matchesSearch = burger.name.toLowerCase().includes(this.search.toLowerCase()) || burger.ingredients.toLowerCase().includes(this.search.toLowerCase());
+                const matchesSearch = 
+                    burger.name.toLowerCase().includes(this.search.toLowerCase())
+                    || burger.ingredients.toLowerCase().includes(this.search.toLowerCase())
+                    || burger.main_ingredient.toLowerCase().includes(this.search.toLowerCase());
                 return matchesSearch;
             });
         }

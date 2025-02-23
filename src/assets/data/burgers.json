@@ -4,103 +4,99 @@
         "name": "Brisket Burger",
         "restaurant": "001",
         "main_ingredient": "brisket",
-        "amount": 200,
-        "bread": "brioche",
-        "ingredients": "cheddar cheese, caramelized onions, BBQ sauce",
-        "price": 12,
-        "ratings": {
-            "taste": 10,
-            "presentation": 8,
-            "quality_price": 8
-        },
-        "image": "/img/001.jpg"
-    },
-    {
-        "id": "002",
-        "name": "La Smash",
-        "restaurant": "001",
-        "main_ingredient": "beef",
-        "amount": 180,
-        "bread": "brioche",
-        "ingredients": "American cheese, onion, pickles, special sauce",
-        "price": 11,
-        "ratings": {
-            "taste": 9,
-            "presentation": 8,
-            "quality_price": 8
-        },
-        "image": "/img/002.jpg"
-    },
-    {
-        "id": "003",
-        "name": "La Smoke",
-        "restaurant": "001",
-        "main_ingredient": "beef",
-        "amount": 200,
-        "bread": "seeded bread",
-        "ingredients": "smoked cheese, bacon, caramelized onion, BBQ sauce",
-        "price": 12,
+        "bread": "potato roll",
+        "ingredients": "thin pickle slices",
+        "price": 15,
         "ratings": {
             "taste": 10,
             "presentation": 9,
             "quality_price": 9
         },
-        "image": "/img/003.jpg"
+        "image": "/img/001.png"
+    },
+    {
+        "id": "002",
+        "name": "Guanciale Glow",
+        "restaurant": "001",
+        "main_ingredient": "aged beef",
+        "amount": 180,
+        "bread": "brioche",
+        "ingredients": "provolone cheese, caramelised in cocacola onion, Italian guanciale",
+        "price": 11,
+        "ratings": {
+            "taste": 10,
+            "presentation": 10,
+            "quality_price": 9
+        },
+        "image": "/img/002.png"
+    },
+    {
+        "id": "003",
+        "name": "Circo",
+        "restaurant": "002",
+        "main_ingredient": "vaca vieja beef",
+        "amount": 200,
+        "bread": "brioche bun",
+        "ingredients": "Batavia Lettuce, Fresh Tomato, Red Onion, English Cheddar Cheese, CIRCO Sauce",
+        "price": 12,
+        "ratings": {
+            "taste": 9,
+            "presentation": 9,
+            "quality_price": 9
+        },
+        "image": "/img/003.png"
     },
     {
         "id": "004",
-        "name": "Guaca-Chicken",
-        "restaurant": "001",
-        "main_ingredient": "grilled chicken",
+        "name": "La Caprichosa",
+        "restaurant": "010",
+        "main_ingredient": "Galician Blonde Beef",
         "amount": 150,
-        "bread": "whole grain bread",
-        "ingredients": "guacamole, lettuce, tomato, red onion, avocado",
+        "bread": "burger bun",
+        "ingredients": "goat cheese, tomato marmalade, crunchy onion",
         "price": 10,
         "ratings": {
             "taste": 8,
             "presentation": 8,
             "quality_price": 8
         },
-        "image": "/img/004.jpg"
+        "image": "/img/004.png"
     },
     {
         "id": "005",
-        "name": "Big Texan",
-        "restaurant": "003",
-        "main_ingredient": "beef",
-        "amount": 220,
-        "bread": "classic bread",
-        "ingredients": "cheddar cheese, bacon, jalapeños, BBQ sauce",
-        "price": 13,
+        "name": "Cheesebacon",
+        "restaurant": "010",
+        "main_ingredient": "Galician Blonde Beef",
+        "bread": "burger bun",
+        "ingredients": "cheddar cheese, bacon, lettuce, tomato, grilled onion",
+        "price": 12.50,
         "ratings": {
-            "taste": 9,
-            "presentation": 9,
+            "taste": 8,
+            "presentation": 7,
             "quality_price": 8
         },
-        "image": "/img/005.jpg"
+        "image": "/img/005.png"
     },
     {
         "id": "006",
-        "name": "Truffle Burger",
-        "restaurant": "004",
-        "main_ingredient": "beef",
-        "amount": 200,
-        "bread": "brioche",
-        "ingredients": "brie cheese, arugula, truffle mayo, caramelized onion",
+        "name": "b-pop",
+        "restaurant": "011",
+        "main_ingredient": "Premium Beef",
+        "bread": "Brioche",
+        "ingredients": "Monterey Jack Cheese, Low Temperature Korean Pulled Pork, Maple Caramelised Bacon Bits, Gangnam Style Sauce, Takis Rain.",
         "price": 14,
         "ratings": {
             "taste": 10,
             "presentation": 9,
             "quality_price": 8
         },
-        "image": "/img/006.jpg"
+        "image": "/img/006.png"
     },
     {
         "id": "007",
         "name": "Smokehouse",
         "restaurant": "012",
         "main_ingredient": "beef",
-        "amount": 180,
         "bread": "artisanal bread",
         "ingredients": "smoked cheese, bacon, chipotle cream, crunchy onion, mesclun, tomato, honey mustard sauce",
         "price": 13.50,
@@ -116,7 +112,6 @@
         "name": "Cherokee Bourbon",
         "restaurant": "012",
         "main_ingredient": "beef",
-        "amount": 180,
         "bread": "artisanal bread",
         "ingredients": "bourbon sauce, emmenthal cheese, blue cheese, bacon, mesclun, honey mustard sauce, tomato",
         "price": 12.50,

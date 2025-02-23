@@ -36,6 +36,8 @@ a {
 }
 
 .itemsList {
+    width: 90%;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
@@ -83,6 +85,7 @@ a {
 
     .itemCard img {
         width: 120px;
+        height: 120px;
     }
     .itemCard h3 {
         font-size: 1rem;

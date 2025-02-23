@@ -42,7 +42,8 @@ export default {
                 <StarRating :rating="currentBurger.rating" />
             </div>
             <div class="burgerDetails">
-                <p>{{ currentBurger.amount }}g. {{ currentBurger.main_ingredient }}</p>
+                <p v-if="currentBurger.amount">{{ currentBurger.amount }}g. {{ currentBurger.main_ingredient }}</p>
+                <p v-else>{{ currentBurger.main_ingredient }}</p>
                 <p>{{ currentBurger.bread }}</p>
                 <p>with {{ currentBurger.ingredients }}</p>
                 <p>price: {{ currentBurger.price }} €</p>
