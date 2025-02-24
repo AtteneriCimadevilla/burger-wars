@@ -102,6 +102,7 @@ font-size: 0.7rem;
 
 @media only screen and (min-width: 1024px) {
     .aboutUsView {
+        grid-template-columns: 1fr 1fr;
         gap: 100px;
     }
 }
