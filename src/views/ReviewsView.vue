@@ -41,17 +41,17 @@ export default {
     <div>
         <!-- Formulario de contacto -->
         <form class="contactForm" @submit.prevent="handleSubmit">
-            <h1>Contacto</h1>
+            <h1>Reviews</h1>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" v-model="contactForm.name" placeholder="Enter your name"
+            <input type="text" id="name" name="name" v-model="contactForm.name" placeholder="Enter your name..."
                 required />
             <br />
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" v-model="contactForm.email" placeholder="Enter your email"
+            <input type="email" id="email" name="email" v-model="contactForm.email" placeholder="Enter your email..."
                 required />
             <br />
             <label for="message">Message:</label>
-            <textarea id="message" name="message" v-model="contactForm.message" placeholder="Enter your message"
+            <textarea id="message" name="message" v-model="contactForm.message" placeholder="Enter your message..."
                 required></textarea>
             <br />
             <button type="submit">Send</button>
@@ -59,7 +59,7 @@ export default {
 
         <!-- Lista de contactos guardados -->
         <div v-if="savedContacts.length > 0">
-            <h2>Contactos Guardados</h2>
+            <h2>Saved reviews</h2>
             <ul>
                 <li v-for="(contact, index) in savedContacts" :key="index">
                     <p><strong>Name:</strong> {{ contact.name }}</p>
@@ -75,8 +75,8 @@ export default {
 <style scoped>
 /* Estilo general */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f7fa;
+    font-family: Roboto, sans-serif;
+    background-color: var(--background-color);
     color: #333;
     margin: 0;
     padding: 0;
@@ -86,9 +86,9 @@ body {
 .contactForm {
     max-width: 500px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
-    background: #ffffff;
+    background: var(--background-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
@@ -104,10 +104,12 @@ body {
     display: block;
     margin: 10px 0 5px;
     text-align: left;
+    color: var(--accent-color-2);
 }
 
 .contactForm input,
 .contactForm textarea {
+    font-family: inherit;
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -155,7 +157,7 @@ ul {
 }
 
 li {
-    background: #ffffff;
+    background: var(--background-color);
     margin-bottom: 15px;
     padding: 15px;
     border-radius: 10px;

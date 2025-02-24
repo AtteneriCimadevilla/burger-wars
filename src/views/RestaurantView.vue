@@ -84,7 +84,7 @@ export default {
     transition: background-color 0.3s;
 }
 .itemCard {
-    height: 290px;
+    height: 295px;
     @media only screen and (max-width: 550px) {
         height: 200px;
     }

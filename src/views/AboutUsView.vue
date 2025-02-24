@@ -52,11 +52,12 @@
             </p>
             <address>
                 <p>
-                    GitHub Repository: <a class="github" href="https://github.com/AtteneriCimadevilla/proyecto-interfaces-vue.git"
+                    GitHub Repository: <a class="github"
+                        href="https://github.com/AtteneriCimadevilla/proyecto-interfaces-vue.git"
                         target="_blank">https://github.com/AtteneriCimadevilla/proyecto-interfaces.git</a>
                 </p>
                 <p>
-                    Email: <a href="mailto:atteneri@example.com">atteneri@example.com</a>
+                    Email: <a href="mailto:attrodsan@alu.edu.gva.es">attrodsan@alu.edu.gva.es</a>
                 </p>
             </address>
         </section>
