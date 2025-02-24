@@ -6,6 +6,7 @@ import RestaurantView from "../views/RestaurantView.vue";
 import ListOfBurgers from "../views/ListOfBurgers.vue";
 import AboutUsView from "../views/AboutUsView.vue";
 import ReviewsView from "../views/ReviewsView.vue";
+import ContactView from "../views/ContactView.vue";
 
 const routes = [
   { path: "/", name: "home", component: Home },
@@ -15,6 +16,7 @@ const routes = [
   { path: "/restaurant/:id", name: "restaurant", component: RestaurantView },
   { path: "/about", name: "about", component: AboutUsView },
   { path: "/reviews", name: "reviews", component: ReviewsView },
+  { path: "/contact", name: "contact", component: ContactView },
   { path: "/:catchAll(.*)", redirect: "/" },
   { path: "/list", name: "list", component: ListOfBurgers },
 ];
