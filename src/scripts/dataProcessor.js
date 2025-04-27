@@ -1,43 +1,60 @@
-import { ref, computed } from 'vue'
+import { ref } from "vue";
 
 export function useDataProcessor() {
-  const burgers = ref([])
-  const restaurants = ref([])
-
-  const processData = () => {
-    burgers.value.forEach(burger => {
-      burger.rating = Math.round((burger.ratings.taste + burger.ratings.presentation + burger.ratings.quality_price) / 3 * 100) / 100
-    })
-
-    restaurants.value.forEach((restaurant) => {
-      const restaurantBurgers = burgers.value.filter(burger => burger.restaurant === restaurant.id)
-      const totalRating = restaurantBurgers.reduce((sum, burger) => sum + burger.rating, 0)
-      restaurant.rating = restaurantBurgers.length > 0 ? Math.round((totalRating / restaurantBurgers.length) * 100) / 100 : 0
-    })
-  }
-
-  const sortedBurgers = computed(() => [...burgers.value].sort((a, b) => b.rating - a.rating))
-  const sortedRestaurants = computed(() => [...restaurants.value].sort((a, b) => b.rating - a.rating))
+  const burgers = ref([]);
+  const restaurants = ref([]);
+  const isLoading = ref(false); // 🆕 loading state
+  const error = ref(null); // 🆕 error state
 
   const loadData = async () => {
-    const burgersModule = await import('../assets/data/burgers.json')
-    const restaurantsModule = await import('../assets/data/restaurants.json')
-    burgers.value = burgersModule.default
-    restaurants.value = restaurantsModule.default
-    processData()
-    saveToLocalStorage()
-  }
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      const [burgersResponse, restaurantsResponse] = await Promise.all([
+        fetch("/api/burgers"),
+        fetch("/api/restaurants"),
+      ]);
+
+      if (!burgersResponse.ok) {
+        throw new Error(
+          `Failed to fetch burgers: ${burgersResponse.status} ${burgersResponse.statusText}`
+        );
+      }
+      if (!restaurantsResponse.ok) {
+        throw new Error(
+          `Failed to fetch restaurants: ${restaurantsResponse.status} ${restaurantsResponse.statusText}`
+        );
+      }
+
+      const burgersData = await burgersResponse.json();
+      const restaurantsData = await restaurantsResponse.json();
+
+      burgers.value = burgersData.data;
+      restaurants.value = restaurantsData.data;
+
+      // ✨ Keep saving to localStorage for now
+      saveToLocalStorage();
+
+      console.log("Data loaded successfully");
+    } catch (err) {
+      console.error("Error loading data:", err);
+      error.value = err.message || "Unknown error";
+    } finally {
+      isLoading.value = false;
+    }
+  };
 
   const saveToLocalStorage = () => {
-    localStorage.setItem('burgers', JSON.stringify(sortedBurgers.value))
-    localStorage.setItem('restaurants', JSON.stringify(sortedRestaurants.value))
-  }
+    localStorage.setItem("burgers", JSON.stringify(burgers.value));
+    localStorage.setItem("restaurants", JSON.stringify(restaurants.value));
+  };
 
   return {
     burgers,
     restaurants,
-    sortedBurgers,
-    sortedRestaurants,
-    loadData
-  }
+    isLoading,
+    error,
+    loadData,
+  };
 }
