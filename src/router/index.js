@@ -19,7 +19,7 @@ const routes = [
   // Routes for views that are not yet implemented
   // { path: "/reviews", name: "reviews", component: ReviewsView },
   // { path: "/contact", name: "contact", component: ContactView },
-  { path: "/:catchAll(.*)", redirect: "/" },
+  // { path: "/:catchAll(.*)", redirect: "/" },
 ];
 
 const router = createRouter({

@@ -1,18 +1,27 @@
-// pages/api/restaurants/index.js
+// GET all restaurants
+
+import pool from "../lib/db.js";
+
 import {
   getAllRestaurants,
   getTotalRestaurants,
-} from "@/lib/repositories/restaurants";
-import { validateQueryParams } from "@/utils/validation";
-import { generatePaginationLinks } from "@/utils/pagination";
-import { errorHandler } from "@/lib/middleware/errorHandler";
+} from "../lib/repositories/restaurants.js";
+import { validateQueryParams } from "../utils/validation.js";
+import { generatePaginationLinks } from "../utils/pagination.js";
+import { errorHandler } from "../lib/middleware/errorHandler.js";
 
 export default async function handler(req, res) {
+  console.log("Incoming request to /api/burgers.");
   errorHandler(req, res, async () => {
     if (req.method !== "GET") {
       res.setHeader("Allow", ["GET"]);
       return res.status(405).end(`Method ${req.method} Not Allowed`);
     }
+
+    console.log(
+      "📥 Incoming GET /api/restaurants request with query:",
+      req.query
+    );
 
     try {
       const { validatedSort, validatedOrder, validatedPage, validatedLimit } =
@@ -49,8 +58,8 @@ export default async function handler(req, res) {
         },
       });
     } catch (error) {
-      console.error("Error in restaurants handler:", error);
-      return res.status(500).json({ message: "Server Error" });
+      console.error("Error fetching restaurants:", error);
+      return res.status(500).json({ error: "Failed to fetch restaurants" });
     }
-  })
+  });
 }
