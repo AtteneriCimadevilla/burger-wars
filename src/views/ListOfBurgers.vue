@@ -1,31 +1,45 @@
 <script>
 import StarRating from '../components/StarRating.vue';
-const burgersList = JSON.parse(localStorage.getItem('burgers'));
+import { ref, watchEffect } from 'vue';
+import { useDataProcessor } from '../scripts/dataProcessor.js';
 
 export default {
-    data() {
-        return {
-            burgers: burgersList,
-            search: '',
-        }
-    },
-    computed: {
-        filteredBurgers() {
-            return this.burgers.filter(burger => {
-                const matchesSearch = 
-                    burger.name.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.ingredients.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.bread.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.main_ingredient.toLowerCase().includes(this.search.toLowerCase())
-                    || (burger.more_ingredients && burger.more_ingredients.toLowerCase().includes(this.search.toLowerCase()));   
+    components: { StarRating },
+    setup() {
+        const { burgers, isLoading, error, loadData } = useDataProcessor();
+        const search = ref('');
+
+        // Run on mount
+        loadData();
+
+        const filteredBurgers = ref([]);
+
+        // Watch for changes in burgers or search
+        watchEffect(() => {
+            if (!burgers.value?.length) {
+                filteredBurgers.value = []; // Reset filteredBurgers if burgers is empty 
+                return;
+            }
+
+            filteredBurgers.value = burgers.value.filter(burger => {
+                if (!burger.name) return false;
+                const matchesSearch =
+                    burger.name.toLowerCase().includes(search.value.toLowerCase()) ||
+                    burger.ingredients?.toLowerCase().includes(search.value.toLowerCase()) ||
+                    burger.bread?.toLowerCase().includes(search.value.toLowerCase()) ||
+                    burger.main_ingredient.toLowerCase().includes(search.value.toLowerCase()) ||
+                    (burger.more_ingredients && burger.more_ingredients.toLowerCase().includes(search.value.toLowerCase()));
+
                 return matchesSearch;
             });
-        }
+        });
+
+        return {
+            search,
+            filteredBurgers,
+        };
     },
-    components: {
-        StarRating
-    }
-}
+};
 </script>
 
 <template>
@@ -45,7 +59,7 @@ export default {
                 <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
                     <h3>{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
-                    <StarRating :rating="burger.rating" maxrating="10" />
+                    <StarRating :rating="parseFloat(burger.rating) || 0" maxrating="10" />
                 </RouterLink>
             </div>
         </div>

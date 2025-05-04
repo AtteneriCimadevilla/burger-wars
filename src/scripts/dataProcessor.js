@@ -11,33 +11,32 @@ export function useDataProcessor() {
     error.value = null;
 
     try {
-      const [burgersResult, restaurantsResult] = await Promise.allSettled([
+      const [burgersResponse, restaurantsResponse] = await Promise.all([
         fetch("/api/burgers"),
         fetch("/api/restaurants"),
       ]);
 
-      if (burgersResult.status === "fulfilled" && burgersResult.value.ok) {
-        const burgersData = await burgersResult.value.json();
-        burgers.value = burgersData.data || [];
-      } else {
-        console.error("Failed to load burgers:", burgersResult.reason);
+      if (!burgersResponse.ok) {
+        throw new Error(`Failed to fetch burgers: ${burgersResponse.status}`);
       }
 
-      if (
-        restaurantsResult.status === "fulfilled" &&
-        restaurantsResult.value.ok
-      ) {
-        const restaurantsData = await restaurantsResult.value.json();
-        restaurants.value = restaurantsData.data || [];
-      } else {
-        console.error("Failed to load restaurants:", restaurantsResult.reason);
+      if (!restaurantsResponse.ok) {
+        throw new Error(
+          `Failed to fetch restaurants: ${restaurantsResponse.status}`
+        );
       }
-      
-      saveToLocalStorage();
 
-      console.log("Data loaded successfully");
+      const burgersData = await burgersResponse.json();
+      const restaurantsData = await restaurantsResponse.json();
+
+      burgers.value = burgersData.data || [];
+      restaurants.value = restaurantsData.data || [];
+
+      // saveToLocalStorage();
+
+      console.log("✅ Data loaded successfully");
     } catch (err) {
-      console.error("Error loading data:", err);
+      console.error("❌ Error loading data:", err);
       error.value = err.message || "Unknown error";
     } finally {
       isLoading.value = false;
