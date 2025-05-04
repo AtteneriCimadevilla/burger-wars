@@ -1,6 +1,6 @@
 <script>
 import StarRating from '../components/StarRating.vue';
-import { onMounted,ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { useDataProcessor } from '../scripts/dataProcessor.js';
 
 export default {

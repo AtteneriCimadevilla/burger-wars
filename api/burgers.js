@@ -1,7 +1,3 @@
-// GET all, POST new burger
-
-import pool from "../lib/db.js";
-
 import { getAllBurgers } from "../lib/repositories/burgers.js";
 import { errorHandler } from "../lib/middleware/errorHandler.js";
 
