@@ -16,11 +16,11 @@ export function useDataProcessor() {
         fetch("/api/restaurants"),
       ]);
 
-      if (!burgersResponse.ok) {
+      // Check if response is actually OK (ignore 404 for HEAD requests)
+      if (!burgersResponse.ok && burgersResponse.status !== 404) {
         throw new Error(`Failed to fetch burgers: ${burgersResponse.status}`);
       }
-
-      if (!restaurantsResponse.ok) {
+      if (!restaurantsResponse.ok && restaurantsResponse.status !== 404) {
         throw new Error(
           `Failed to fetch restaurants: ${restaurantsResponse.status}`
         );

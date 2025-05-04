@@ -1,6 +1,6 @@
 <script>
 import StarRating from '../components/StarRating.vue';
-import { ref, watchEffect } from 'vue';
+import { onMounted,ref, watchEffect } from 'vue';
 import { useDataProcessor } from '../scripts/dataProcessor.js';
 
 export default {
@@ -9,8 +9,10 @@ export default {
         const { burgers, isLoading, error, loadData } = useDataProcessor();
         const search = ref('');
 
-        // Run on mount
-        loadData();
+        // Use onMounted to ensure loadData runs only once
+        onMounted(() => {
+            loadData();
+        });
 
         const filteredBurgers = ref([]);
 
@@ -54,13 +56,18 @@ export default {
             <input class="searchInput" type="text" v-model="search" placeholder="Search...">
         </div>
 
-        <div class="itemsList">
-            <div v-for="burger in filteredBurgers" :key="burger.id" class="itemCard">
-                <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
-                    <h3>{{ burger.name }}</h3>
-                    <img :src="burger.image" alt="burger.name">
-                    <StarRating :rating="parseFloat(burger.rating) || 0" maxrating="10" />
-                </RouterLink>
+        <div v-if="isLoading">Loading...</div>
+        <div v-else-if="error" class="error">{{ error }}</div>
+        <div v-else>
+
+            <div class="itemsList">
+                <div v-for="burger in filteredBurgers" :key="burger.id" class="itemCard">
+                    <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
+                        <h3>{{ burger.name }}</h3>
+                        <img :src="burger.image" alt="burger.name">
+                        <StarRating :rating="parseFloat(burger.rating) || 0" maxrating="10" />
+                    </RouterLink>
+                </div>
             </div>
         </div>
     </div>
@@ -106,6 +113,7 @@ export default {
 .itemCard {
     height: 300px;
 }
+
 .itemLink {
     display: flex;
     flex-direction: column;
@@ -129,16 +137,19 @@ export default {
     h3 {
         font-size: 1rem;
     }
+
     .searchInput {
         width: 80%;
     }
+
     .itemCard {
         height: 200px;
     }
 }
+
 @media only screen and (max-width: 420px) {
-.listOfBurgers {
-    width: 98%;
-}
+    .listOfBurgers {
+        width: 98%;
+    }
 }
 </style>
