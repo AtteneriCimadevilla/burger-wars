@@ -10,6 +10,7 @@
 
 <template>
     <div>
+        <h1>HomePage</h1>
         <ListOfBurgers />
     </div>
 </template>
