@@ -1,17 +1,25 @@
+<script>
+export default {
+    name: 'MenuComponent'
+}
+</script>
+
 <template>
     <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/restaurants">Restaurants</RouterLink>
         <RouterLink to="/burgers">Burgers</RouterLink>
         <RouterLink to="/about">About us</RouterLink>
+        <template v-if="isAuthenticated">
+            <RouterLink to="/profile">Profile</RouterLink>
+            <button @click="logout">Log out</button>
+        </template>
+        <template v-else>
+            <RouterLink to="/login">Log in</RouterLink>
+            <RouterLink to="/register">Register</RouterLink>
+        </template>
     </nav>
 </template>
-
-<script>
-export default {
-    name: 'MenuComponent'
-}
-</script>
 
 <style scoped>
 nav {

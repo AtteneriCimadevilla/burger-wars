@@ -1,11 +1,8 @@
-<script>
+<script setup>
 import MenuComponent from '../components/MenuComponent.vue';
+import useAuth from "@/composables/useAuth.js";
 
-export default {
-    components: {
-        MenuComponent
-    }
-}
+const { isAuthenticated, logout } = useAuth();
 </script>
 
 <template>
@@ -13,6 +10,7 @@ export default {
         <RouterLink to="/">
             <img class="logo" src="/img/logo.png" alt="Home" />
         </RouterLink>
+        
         <MenuComponent />
     </header>
 </template>

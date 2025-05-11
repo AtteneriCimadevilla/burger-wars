@@ -1,31 +1,28 @@
-<script>
-import StarRating from '../components/StarRating.vue';
-const burgersList = JSON.parse(localStorage.getItem('burgers'));
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useDataProcessor } from '../scripts/dataProcessor'
+import StarRating from '../components/StarRating.vue'
 
-export default {
-    data() {
-        return {
-            burgers: burgersList,
-            search: '',
-        }
-    },
-    computed: {
-        filteredBurgers() {
-            return this.burgers.filter(burger => {
-                const matchesSearch = 
-                    burger.name.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.ingredients.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.bread.toLowerCase().includes(this.search.toLowerCase())
-                    || burger.main_ingredient.toLowerCase().includes(this.search.toLowerCase())
-                    || (burger.more_ingredients && burger.more_ingredients.toLowerCase().includes(this.search.toLowerCase()));   
-                return matchesSearch;
-            });
-        }
-    },
-    components: {
-        StarRating
-    }
-}
+const search = ref('')
+const burgers = ref([])
+
+const { sortedBurgers, loadData } = useDataProcessor()
+
+onMounted(async () => {
+    await loadData()
+    burgers.value = sortedBurgers.value
+})
+
+const filteredBurgers = computed(() => {
+    return burgers.value.filter(burger => {
+        const text = search.value.toLowerCase()
+        return burger.name.toLowerCase().includes(text)
+            || burger.ingredients.toLowerCase().includes(text)
+            || burger.bread.toLowerCase().includes(text)
+            || burger.main_ingredient.toLowerCase().includes(text)
+            || (burger.more_ingredients && burger.more_ingredients.toLowerCase().includes(text))
+    })
+})
 </script>
 
 <template>
@@ -45,7 +42,7 @@ export default {
                 <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
                     <h3>{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
-                    <StarRating :rating="burger.rating" maxrating="10" />
+                    <StarRating :rating="burger.rating" maxrating="5" />
                 </RouterLink>
             </div>
         </div>

@@ -39,7 +39,7 @@ export default {
                 <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
                     <h3 class="itemName">{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">
-                    <StarRating :rating="burger.rating" :maxrating="10" />
+                    <StarRating :rating="burger.rating" :maxrating="5" />
                 </RouterLink>
             </div>
         </div>

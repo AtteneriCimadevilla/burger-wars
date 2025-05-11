@@ -1,43 +1,74 @@
-import { ref, computed } from 'vue'
+import { ref, computed } from "vue";
 
 export function useDataProcessor() {
-  const burgers = ref([])
-  const restaurants = ref([])
+  const burgers = ref([]);
+  const restaurants = ref([]);
 
   const processData = () => {
-    burgers.value.forEach(burger => {
-      burger.rating = Math.round((burger.ratings.taste + burger.ratings.presentation + burger.ratings.quality_price) / 3 * 100) / 100
-    })
+    burgers.value.forEach((burger) => {
+      burger.rating =
+        Math.round(
+          ((burger.ratings.taste +
+            burger.ratings.presentation +
+            burger.ratings.quality_price) /
+            3) *
+            100
+        ) / 100;
+    });
 
     restaurants.value.forEach((restaurant) => {
-      const restaurantBurgers = burgers.value.filter(burger => burger.restaurant === restaurant.id)
-      const totalRating = restaurantBurgers.reduce((sum, burger) => sum + burger.rating, 0)
-      restaurant.rating = restaurantBurgers.length > 0 ? Math.round((totalRating / restaurantBurgers.length) * 100) / 100 : 0
-    })
-  }
+      const restaurantBurgers = burgers.value.filter(
+        (burger) => burger.restaurant === restaurant.id
+      );
+      const totalRating = restaurantBurgers.reduce(
+        (sum, burger) => sum + burger.rating,
+        0
+      );
+      restaurant.rating =
+        restaurantBurgers.length > 0
+          ? Math.round((totalRating / restaurantBurgers.length) * 100) / 100
+          : 0;
+    });
+  };
 
-  const sortedBurgers = computed(() => [...burgers.value].sort((a, b) => b.rating - a.rating))
-  const sortedRestaurants = computed(() => [...restaurants.value].sort((a, b) => b.rating - a.rating))
+  const sortedBurgers = computed(() =>
+    [...burgers.value].sort((a, b) => b.rating - a.rating)
+  );
+  const sortedRestaurants = computed(() =>
+    [...restaurants.value].sort((a, b) => b.rating - a.rating)
+  );
 
   const loadData = async () => {
-    const burgersModule = await import('../assets/data/burgers.json')
-    const restaurantsModule = await import('../assets/data/restaurants.json')
-    burgers.value = burgersModule.default
-    restaurants.value = restaurantsModule.default
-    processData()
-    saveToLocalStorage()
-  }
+    try {
+      const burgersResponse = await fetch("/api/burgers");
+      const restaurantsResponse = await fetch("/api/restaurants");
+
+      if (!burgersResponse.ok || !restaurantsResponse.ok) {
+        throw new Error("Error loading data");
+      }
+
+      burgers.value = await burgersResponse.json();
+      restaurants.value = await restaurantsResponse.json();
+      processData();
+      saveToLocalStorage();
+    } catch (error) {
+      console.error("loadData error:", error);
+    }
+  };
 
   const saveToLocalStorage = () => {
-    localStorage.setItem('burgers', JSON.stringify(sortedBurgers.value))
-    localStorage.setItem('restaurants', JSON.stringify(sortedRestaurants.value))
-  }
+    localStorage.setItem("burgers", JSON.stringify(sortedBurgers.value));
+    localStorage.setItem(
+      "restaurants",
+      JSON.stringify(sortedRestaurants.value)
+    );
+  };
 
   return {
     burgers,
     restaurants,
     sortedBurgers,
     sortedRestaurants,
-    loadData
-  }
+    loadData,
+  };
 }

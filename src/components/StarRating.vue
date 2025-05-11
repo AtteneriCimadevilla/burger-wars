@@ -7,12 +7,12 @@ export default {
         },
         maxRating: {
             type: Number,
-            default: 10
+            default: 5
         }
     },
     computed: {
         filledStars() {
-            return (this.rating / this.maxRating) * 10;
+            return (this.rating / this.maxRating) * 5;
         }
     }
 }
@@ -20,7 +20,7 @@ export default {
 
 <template>
   <div class="star-rating">
-    <span v-for="n in 10" :key="n" class="star" :class="{ 'filled': n <= filledStars, 'half-filled': n === Math.ceil(filledStars) && !Number.isInteger(filledStars) }">
+    <span v-for="n in 5" :key="n" class="star" :class="{ 'filled': n <= filledStars, 'half-filled': n === Math.ceil(filledStars) && !Number.isInteger(filledStars) }">
       ★
     </span>
   </div>
