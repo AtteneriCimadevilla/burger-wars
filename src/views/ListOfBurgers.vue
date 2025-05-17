@@ -56,8 +56,8 @@ const filteredBurgers = computed(() => {
 }
 
 .mainHeader {
-    margin: 20px 0 20px 20px;
-    padding-right: 20px;
+    margin: 20px 0 20px 40px;
+    padding-right: 40px;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;

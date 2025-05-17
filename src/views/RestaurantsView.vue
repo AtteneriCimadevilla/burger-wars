@@ -1,21 +1,20 @@
-<script>
-const restaurantsList = JSON.parse(localStorage.getItem('restaurants'));
-export default {
-    data() {
-        return {
-            restaurants: restaurantsList,
-            search: '',
-        }
-    },
-    computed: {
-        filteredRestaurants() {
-            return this.restaurants.filter(restaurant => {
-                const matchesSearch = restaurant.name.toLowerCase().includes(this.search.toLowerCase());
-                return matchesSearch;
-            })
-        }
-    },
-}
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useDataProcessor } from '../scripts/dataProcessor'
+
+const search = ref('')
+const { restaurants, loadData } = useDataProcessor()
+
+onMounted(async () => {
+    await loadData()
+})
+
+const filteredRestaurants = computed(() => {
+    return restaurants.value.filter(restaurant => {
+        const text = search.value.toLowerCase()
+        return restaurant.name.toLowerCase().includes(text)
+    })
+})
 </script>
 
 <template>
