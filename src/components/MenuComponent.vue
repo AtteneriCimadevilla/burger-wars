@@ -10,14 +10,14 @@ export default {
         <RouterLink to="/restaurants">Restaurants</RouterLink>
         <RouterLink to="/burgers">Burgers</RouterLink>
         <RouterLink to="/about">About us</RouterLink>
-        <template v-if="isAuthenticated">
+        <!-- <template v-if="isAuthenticated">
             <RouterLink to="/profile">Profile</RouterLink>
             <button @click="logout">Log out</button>
         </template>
-        <template v-else>
+        <template v-else> -->
             <RouterLink to="/login">Log in</RouterLink>
             <RouterLink to="/register">Register</RouterLink>
-        </template>
+        <!-- </template> -->
     </nav>
 </template>
 

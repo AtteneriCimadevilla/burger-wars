@@ -25,7 +25,7 @@ export default {
         },
         currentRestaurant() {
             return this.currentBurger
-                ? this.restaurants.find(restaurant => restaurant.id === this.currentBurger.restaurant)
+                ? this.restaurants.find(restaurant => restaurant.id === this.currentBurger.restaurant_id)
                 : null;
         }
     }
@@ -47,9 +47,9 @@ export default {
                 <p>{{ currentBurger.bread }}</p>
                 <p>with {{ currentBurger.ingredients }}</p>
                 <p>price: {{ currentBurger.price }} €</p>
-                <p>taste rating: {{ currentBurger.ratings.taste }}</p>
-                <p>presentation rating: {{ currentBurger.ratings.presentation }}</p>
-                <p>quality/price rating: {{ currentBurger.ratings.quality_price }}</p>
+                <p>taste rating: {{ currentBurger.taste_rating }}</p>
+                <p>presentation rating: {{ currentBurger.presentation_rating }}</p>
+                <p>quality/price rating: {{ currentBurger.quality_price_rating }}</p>
             </div>
         </div>
         <RouterLink :to="`/restaurant/${currentRestaurant.id}`">

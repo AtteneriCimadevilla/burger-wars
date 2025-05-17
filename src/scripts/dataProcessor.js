@@ -8,9 +8,9 @@ export function useDataProcessor() {
     burgers.value.forEach((burger) => {
       burger.rating =
         Math.round(
-          ((burger.ratings.taste +
-            burger.ratings.presentation +
-            burger.ratings.quality_price) /
+          ((burger.taste_rating +
+            burger.presentation_rating +
+            burger.quality_price_rating) /
             3) *
             100
         ) / 100;
@@ -51,10 +51,16 @@ export function useDataProcessor() {
       restaurants.value = await restaurantsResponse.json();
       processData();
       saveToLocalStorage();
+      // console.log("Data loaded successfully");
+      // console.log(burgers.value);
+      // console.log(restaurants.value);
+      
     } catch (error) {
       console.error("loadData error:", error);
     }
   };
+
+  console.log("hola");
 
   const saveToLocalStorage = () => {
     localStorage.setItem("burgers", JSON.stringify(sortedBurgers.value));
@@ -63,6 +69,10 @@ export function useDataProcessor() {
       JSON.stringify(sortedRestaurants.value)
     );
   };
+
+  console.log(burgers.value);
+  console.log(restaurants.value);
+  
 
   return {
     burgers,

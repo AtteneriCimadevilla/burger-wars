@@ -17,7 +17,7 @@ export default {
             return this.restaurants.find(restaurant => restaurant.id === this.$route.params.id) || null;
         },
         currentRestaurantBurgers() {
-            return this.burgers.filter(burger => burger.restaurant === this.$route.params.id) || null;
+            return this.burgers.filter(burger => burger.restaurant_id === this.$route.params.id) || null;
         },
     },
 }
@@ -31,7 +31,6 @@ export default {
             <a :href="currentRestaurant.website" class="link">{{ currentRestaurant.website }}</a>
             <iframe :src="currentRestaurant.url" frameborder="0" class="map"></iframe>
             <p>{{ currentRestaurant.address }}</p>
-
         </div>
 
         <div v-if="currentRestaurantBurgers.length" class="itemsList">
