@@ -1,16 +1,17 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useDataProcessor } from '../scripts/dataProcessor'
+import { ref, computed, onMounted } from 'vue';
+import { useDataProcessor } from '../scripts/dataProcessor';
+import StarRating from '../components/StarRating.vue';
 
 const search = ref('')
-const { restaurants, loadData } = useDataProcessor()
+const { sortedRestaurants, loadData } = useDataProcessor()
 
 onMounted(async () => {
     await loadData()
 })
 
 const filteredRestaurants = computed(() => {
-    return restaurants.value.filter(restaurant => {
+    return sortedRestaurants.value.filter(restaurant => {
         const text = search.value.toLowerCase()
         return restaurant.name.toLowerCase().includes(text)
     })
@@ -32,6 +33,7 @@ const filteredRestaurants = computed(() => {
                 <RouterLink :to="`/restaurant/${restaurant.id}`" class="itemLink">
                     <img :src="restaurant.image" :alt="restaurant.name">
                     <h4 class="itemName">{{ restaurant.name }}</h4>
+                    <StarRating :rating="restaurant.rating" :maxrating="5" />
                 </RouterLink>
             </div>
         </div>

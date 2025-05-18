@@ -18,7 +18,7 @@ export function useDataProcessor() {
 
     restaurants.value.forEach((restaurant) => {
       const restaurantBurgers = burgers.value.filter(
-        (burger) => burger.restaurant === restaurant.id
+        (burger) => burger.restaurant_id === restaurant.id
       );
       const totalRating = restaurantBurgers.reduce(
         (sum, burger) => sum + burger.rating,

@@ -1,30 +1,35 @@
-<script>
-import StarRating from '@/components/StarRating.vue';
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useDataProcessor } from '../scripts/dataProcessor';
+import StarRating from '../components/StarRating.vue';
+import LoadingSpinner from '../components/LoadingSpinner.vue';
 
-export default {
-    props: ['id'],
-    data() {
-        return {
-            restaurants: JSON.parse(localStorage.getItem('restaurants') || '[]'),
-            burgers: JSON.parse(localStorage.getItem('burgers') || '[]')
-        }
-    },
-    components: {
-        StarRating
-    },
-    computed: {
-        currentRestaurant() {
-            return this.restaurants.find(restaurant => restaurant.id === this.$route.params.id) || null;
-        },
-        currentRestaurantBurgers() {
-            return this.burgers.filter(burger => burger.restaurant_id === this.$route.params.id) || null;
-        },
-    },
-}
+const route = useRoute();
+const { restaurants, burgers, loadData } = useDataProcessor();
+
+const currentRestaurant = computed(() => {
+    return restaurants.value?.find(r => r.id === route.params.id) || null
+})
+
+const currentRestaurantBurgers = computed(() => {
+    if (!burgers.value) return []
+    return burgers.value.filter(burger => burger.restaurant_id === route.params.id)
+})
+
+// Loading state
+const loading = ref(true)
+
+onMounted(async () => {
+    await loadData()
+    loading.value = false
+})
 </script>
 
 <template>
-    <div v-if="currentRestaurant" class="restaurant-details">
+    <LoadingSpinner v-if="loading" />
+
+    <div v-else-if="currentRestaurant" class="restaurant-details">
         <div class="restaurantHeader">
             <img class="miniLogo" :src="currentRestaurant.image" alt="currentRestaurant.name">
             <h3>{{ currentRestaurant.name }}</h3>
