@@ -1,39 +1,34 @@
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useDataProcessor } from '../scripts/dataProcessor';
 import StarRating from '@/components/StarRating.vue';
-import { RouterLink } from 'vue-router';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
-export default {
-    name: 'BurgerView',
-    components: {
-        StarRating
-    },
-    props: {
-        id: {
-            type: String,
-            required: true
-        }
-    },
-    data() {
-        return {
-            burgers: JSON.parse(localStorage.getItem('burgers') || '[]'),
-            restaurants: JSON.parse(localStorage.getItem('restaurants') || '[]')
-        }
-    },
-    computed: {
-        currentBurger() {
-            return this.burgers.find(burger => burger.id === this.$route.params.id) || null;
-        },
-        currentRestaurant() {
-            return this.currentBurger
-                ? this.restaurants.find(restaurant => restaurant.id === this.currentBurger.restaurant_id)
-                : null;
-        }
-    }
-}
+const route = useRoute();
+const { burgers, restaurants, loadData } = useDataProcessor();
+
+const currentBurger = computed(() => {
+    return burgers.value?.find(burger => burger.id === route.params.id) || null;
+});
+
+const currentRestaurant = computed(() => {
+    if (!currentBurger.value) return null;
+    return restaurants.value?.find(r => r.id === currentBurger.value.restaurant_id) || null;
+});
+
+const loading = ref(true);
+
+onMounted(async () => {
+    await loadData();
+    loading.value = false;
+});
 </script>
 
 <template>
-    <div v-if="currentBurger" class="burgerView">
+    <LoadingSpinner v-if="loading" />
+
+    <div v-else-if="currentBurger" class="burgerView">
         <div class="burgerMain">
             <div class="burgerHeader itemCard">
                 <h3>{{ currentBurger.name }}</h3>

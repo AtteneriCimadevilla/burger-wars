@@ -21,8 +21,8 @@ const currentRestaurantBurgers = computed(() => {
 const loading = ref(true)
 
 onMounted(async () => {
-    await loadData()
-    loading.value = false
+    await loadData();
+    loading.value = false;
 })
 </script>
 
