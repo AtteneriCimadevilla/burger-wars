@@ -1,56 +1,44 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useDataProcessor } from '../scripts/dataProcessor';
+import { useBurger } from '@/composables';
 import StarRating from '@/components/StarRating.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const route = useRoute();
-const { burgers, restaurants, loadData } = useDataProcessor();
+const id = route.params.id;
 
-const currentBurger = computed(() => {
-    return burgers.value?.find(burger => burger.id === route.params.id) || null;
-});
+const { burger, restaurant, error, loading, loadBurger } = useBurger(id);
 
-const currentRestaurant = computed(() => {
-    if (!currentBurger.value) return null;
-    return restaurants.value?.find(r => r.id === currentBurger.value.restaurant_id) || null;
-});
+loadBurger();
 
-const loading = ref(true);
-
-onMounted(async () => {
-    await loadData();
-    loading.value = false;
-});
 </script>
 
 <template>
     <LoadingSpinner v-if="loading" />
 
-    <div v-else-if="currentBurger" class="burgerView">
+    <div v-else-if="burger" class="burgerView">
         <div class="burgerMain">
             <div class="burgerHeader itemCard">
-                <h3>{{ currentBurger.name }}</h3>
-                <img :src="currentBurger.image" :alt="currentBurger.name">
-                <p>{{ currentBurger.description }}</p>
-                <StarRating :rating="currentBurger.rating" />
+                <h3>{{ burger.name }}</h3>
+                <img :src="burger.image" :alt="burger.name">
+                <p>{{ burger.description }}</p>
+                <StarRating :rating="burger.rating" />
             </div>
             <div class="burgerDetails">
-                <p v-if="currentBurger.amount">{{ currentBurger.amount }}g. {{ currentBurger.main_ingredient }}</p>
-                <p v-else>{{ currentBurger.main_ingredient }}</p>
-                <p>{{ currentBurger.bread }}</p>
-                <p>with {{ currentBurger.ingredients }}</p>
-                <p>price: {{ currentBurger.price }} €</p>
-                <p>taste rating: {{ currentBurger.taste_rating }}</p>
-                <p>presentation rating: {{ currentBurger.presentation_rating }}</p>
-                <p>quality/price rating: {{ currentBurger.quality_price_rating }}</p>
+                <p v-if="burger.amount">{{ burger.amount }}g. {{ burger.main_ingredient }}</p>
+                <p v-else>{{ burger.main_ingredient }}</p>
+                <p>{{ burger.bread }}</p>
+                <p>with {{ burger.ingredients }}</p>
+                <p>price: {{ burger.price }} €</p>
+                <p>taste rating: {{ burger.taste_rating }}</p>
+                <p>presentation rating: {{ burger.presentation_rating }}</p>
+                <p>quality/price rating: {{ burger.quality_price_rating }}</p>
             </div>
         </div>
-        <RouterLink :to="`/restaurant/${currentRestaurant.id}`">
-            <div v-if="currentRestaurant" class="restaurantInfo">
-                <img :src="currentRestaurant.image" :alt="currentRestaurant.name">
-                <h3>{{ currentRestaurant.name }}</h3>
+        <RouterLink :to="`/restaurant/${restaurant.id}`">
+            <div v-if="restaurant" class="restaurantInfo">
+                <img :src="restaurant.image" :alt="restaurant.name">
+                <h3>{{ restaurant.name }}</h3>
             </div>
         </RouterLink>
     </div>

@@ -1,45 +1,31 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useDataProcessor } from '../scripts/dataProcessor';
+import { useRestaurant } from '@/composables';
 import StarRating from '../components/StarRating.vue';
 import LoadingSpinner from '../components/LoadingSpinner.vue';
 
 const route = useRoute();
-const { restaurants, burgers, loadData } = useDataProcessor();
+const id = route.params.id;
 
-const currentRestaurant = computed(() => {
-    return restaurants.value?.find(r => r.id === route.params.id) || null
-})
+const { restaurant, sortedBurgers, error, loading, loadRestaurant } = useRestaurant(id);
 
-const currentRestaurantBurgers = computed(() => {
-    if (!burgers.value) return []
-    return burgers.value.filter(burger => burger.restaurant_id === route.params.id)
-})
-
-// Loading state
-const loading = ref(true)
-
-onMounted(async () => {
-    await loadData();
-    loading.value = false;
-})
+loadRestaurant();
 </script>
 
 <template>
     <LoadingSpinner v-if="loading" />
 
-    <div v-else-if="currentRestaurant" class="restaurant-details">
+    <div v-else-if="restaurant" class="restaurant-details">
         <div class="restaurantHeader">
-            <img class="miniLogo" :src="currentRestaurant.image" alt="currentRestaurant.name">
-            <h3>{{ currentRestaurant.name }}</h3>
-            <a :href="currentRestaurant.website" class="link">{{ currentRestaurant.website }}</a>
-            <iframe :src="currentRestaurant.url" frameborder="0" class="map"></iframe>
-            <p>{{ currentRestaurant.address }}</p>
+            <img class="miniLogo" :src="restaurant.image" alt="restaurant.name">
+            <h3>{{ restaurant.name }}</h3>
+            <a :href="restaurant.website" class="link">{{ restaurant.website }}</a>
+            <iframe :src="restaurant.url" frameborder="0" class="map"></iframe>
+            <p>{{ restaurant.address }}</p>
         </div>
 
-        <div v-if="currentRestaurantBurgers.length" class="itemsList">
-            <div v-for="burger in currentRestaurantBurgers" :key="burger.id" class="itemCard">
+        <div v-if="sortedBurgers.length" class="itemsList">
+            <div v-for="burger in sortedBurgers" :key="burger.id" class="itemCard">
                 <RouterLink :to="`/burger/${burger.id}`" class="itemLink">
                     <h3 class="itemName">{{ burger.name }}</h3>
                     <img :src="burger.image" alt="burger.name">

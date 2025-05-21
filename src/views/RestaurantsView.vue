@@ -1,13 +1,15 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useDataProcessor } from '../scripts/dataProcessor';
+import { useRestaurants } from '@/composables';
 import StarRating from '../components/StarRating.vue';
 
-const search = ref('')
-const { sortedRestaurants, loadData } = useDataProcessor()
+const search = ref('');
+const restaurants = ref([]);
+const { sortedRestaurants, error, loading, loadRestaurants } = useRestaurants()
 
 onMounted(async () => {
-    await loadData()
+    await loadRestaurants();
+    restaurants.value = sortedRestaurants.value;
 })
 
 const filteredRestaurants = computed(() => {

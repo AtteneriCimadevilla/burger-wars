@@ -1,17 +1,17 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useDataProcessor } from '../scripts/dataProcessor'
-import StarRating from '../components/StarRating.vue'
+import { ref, computed, onMounted } from 'vue';
+import { useBurgers } from '@/composables';
+import StarRating from '../components/StarRating.vue';
 
-const search = ref('')
-const burgers = ref([])
+const search = ref('');
+const burgers = ref([]);
 
-const { sortedBurgers, loadData } = useDataProcessor()
+const { sortedBurgers, error, loading, loadBurgers } = useBurgers();
 
 onMounted(async () => {
-    await loadData()
-    burgers.value = sortedBurgers.value
-})
+    await loadBurgers()
+    burgers.value = sortedBurgers.value;
+});
 
 const filteredBurgers = computed(() => {
     return burgers.value.filter(burger => {
