@@ -27,11 +27,13 @@ header {
 }
 .logo {
     height: 15vh;
+    margin-left: 20px;
 }
 
 @media only screen and (max-width: 550px) {
     header {
         padding: 0 30px;
     }
+    
 }
 </style>
