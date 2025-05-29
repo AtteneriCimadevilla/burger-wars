@@ -30,10 +30,9 @@ header {
     margin-left: 20px;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 600px) {
     header {
         padding: 0 30px;
     }
-    
 }
 </style>

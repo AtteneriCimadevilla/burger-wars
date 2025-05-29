@@ -15,8 +15,8 @@ export default {
             <button @click="logout">Log out</button>
         </template>
         <template v-else> -->
-            <RouterLink to="/login">Log in</RouterLink>
-            <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/login">Log in</RouterLink>
         <!-- </template> -->
     </nav>
 </template>
@@ -33,7 +33,7 @@ a {
     justify-self: center;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 600px) {
     nav {
         flex-direction: column;
         row-gap: 10px;
