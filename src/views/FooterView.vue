@@ -3,7 +3,7 @@
 
 <template>
     <footer>
-        <p class="copyright">&copy; Atteneri Cimadevilla 2024 - Todos los derechos reservados.</p>
+        <p class="copyright">&copy; Atteneri Cimadevilla 2025 - Todos los derechos reservados.</p>
     </footer>
 </template>
 

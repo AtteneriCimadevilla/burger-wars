@@ -32,10 +32,10 @@ const filteredRestaurants = computed(() => {
 
         <div class="itemsList">
             <div v-for="restaurant in filteredRestaurants" :key="restaurant.id" class="itemCard">
+                <StarRating :rating="restaurant.rating" :maxrating="5" />
                 <RouterLink :to="`/restaurant/${restaurant.id}`" class="itemLink">
                     <img :src="restaurant.image" :alt="restaurant.name">
                     <h4 class="itemName">{{ restaurant.name }}</h4>
-                    <StarRating :rating="restaurant.rating" :maxrating="5" />
                 </RouterLink>
             </div>
         </div>
@@ -63,7 +63,6 @@ const filteredRestaurants = computed(() => {
 .searchInput {
     margin-left: 20px;
 }
-
 .searchInput input {
     padding: 5px;
     width: 200px;
@@ -90,6 +89,9 @@ const filteredRestaurants = computed(() => {
 
 }
 
+.itemCard {
+    height: 310px;
+}
 .itemLink {
     display: flex;
     flex-direction: column;
