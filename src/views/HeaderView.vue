@@ -23,7 +23,7 @@ header {
     align-items: center;
     justify-items: right;
     background-color: var(--accent-color-2);
-    padding: 10px;
+    padding: 10px 20px;
 }
 .logo {
     height: 15vh;
