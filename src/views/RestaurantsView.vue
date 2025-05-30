@@ -78,7 +78,7 @@ const filteredRestaurants = computed(() => {
     /* Optional: add a subtle glow effect */
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 600px) {
     .mainHeader {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -107,5 +107,24 @@ const filteredRestaurants = computed(() => {
 .itemName {
     text-align: center;
     word-wrap: break-word;
+}
+@media screen and (max-width: 600px) {
+    .itemsList {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .itemCard {
+        width: 150px;
+        height: 200px;
+    }
+
+    .itemCard img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .itemCard h3 {
+        font-size: 1rem;
+    }
 }
 </style>

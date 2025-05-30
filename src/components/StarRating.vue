@@ -52,7 +52,7 @@ export default {
   color: var(--logo-color);
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
   .star {
     font-size: 14px;
   }

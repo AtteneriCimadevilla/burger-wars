@@ -75,7 +75,7 @@ loadRestaurant();
 }
 .itemCard {
     height: 295px;
-    @media only screen and (max-width: 550px) {
+    @media only screen and (max-width: 600px) {
         height: 200px;
     }
 }

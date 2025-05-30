@@ -107,7 +107,11 @@ loadBurger();
     border-radius: 10px;
     box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s;
-    padding: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
 .restaurantInfo:hover {
@@ -120,6 +124,7 @@ loadBurger();
 .restaurantInfo img {
     width: 150px;
     border-radius: 10px;
+    border: 3px solid var(--accent-color-2);
 }
 
 .error-message {

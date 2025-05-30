@@ -108,7 +108,7 @@ const filteredBurgers = computed(() => {
     word-wrap: break-word;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 600px) {
     h3 {
         font-size: 1rem;
     }
