@@ -115,7 +115,7 @@ const filteredRestaurants = computed(() => {
 
     .itemCard {
         width: 150px;
-        height: 200px;
+        height: 220px;
     }
 
     .itemCard img {

@@ -36,7 +36,8 @@
             <p>
                 Burger Wars is developed by Atteneri María Rodríguez Sánchez as part of the "Desarrollo de
                 Interfaces Web" course in the second year of the "Desarrollo de Aplicaciones Multiplataforma"
-                program at IES El Pla. Under the guidance of Professors Luis Alemañ Fillol, Vicente Jesús Santonja Ivorra and David Pérez Pastor, this project combines technical skills with a passion for great food.
+                program at IES El Pla. Under the guidance of Professors Luis Alemañ Fillol, Vicente Jesús Santonja
+                Ivorra and David Pérez Pastor, this project combines technical skills with a passion for great food.
             </p>
             <p>
                 The application is built using modern web technologies such as HTML5, CSS, JavaScript, and the
@@ -51,9 +52,8 @@
             </p>
             <address>
                 <p>
-                    GitHub Repository: <a class="github"
-                        href="https://github.com/AtteneriCimadevilla/proyecto-interfaces-vue.git"
-                        target="_blank">https://github.com/AtteneriCimadevilla/proyecto-interfaces.git</a>
+                    GitHub Repository: <a class="github" href="https://github.com/AtteneriCimadevilla/burger-wars.git"
+                        target="_blank">https://github.com/AtteneriCimadevilla/burger-wars.git</a>
                 </p>
                 <p>
                     Email: <a href="mailto:attrodsan@alu.edu.gva.es">attrodsan@alu.edu.gva.es</a>
