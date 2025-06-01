@@ -10,7 +10,7 @@
 
 <template>
     <div>
-        <h1>HomePage</h1>
+        <h1>Welcome to Burger Wars</h1>
         <ListOfBurgers />
     </div>
 </template>

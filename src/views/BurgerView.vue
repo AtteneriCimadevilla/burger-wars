@@ -1,16 +1,56 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useBurger } from '@/composables';
 import StarRating from '@/components/StarRating.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import ReviewForm from '@/components/ReviewForm.vue';
+import ReviewsComponent from '@/components/ReviewsComponent.vue';
 
 const route = useRoute();
 const id = route.params.id;
 
 const { burger, restaurant, error, loading, loadBurger } = useBurger(id);
+const reviews = ref([]);
+const reviewsLoading = ref(true);
+const reviewsError = ref('');
 
-loadBurger();
+const loadReviews = async () => {
+    try {
+        const response = await fetch(`/api/reviews?burger_id=${id}`);
 
+        if (!response.ok) {
+            throw new Error('Failed to load reviews');
+        }
+
+        const data = await response.json();
+        reviews.value = data;
+    } catch (err) {
+        reviewsError.value = err.message;
+    } finally {
+        reviewsLoading.value = false;
+    }
+};
+
+const handleReviewSubmitted = () => {
+    // Reload reviews after a new one is submitted
+    loadReviews();
+};
+
+const handleReviewUpdated = (updatedReview) => {
+    const index = reviews.value.findIndex(r => r.id === updatedReview.id);
+    if (index !== -1) {
+        reviews.value[index] = {
+            ...reviews.value[index],
+            ...updatedReview
+        };
+    }
+};
+
+onMounted(async () => {
+    await loadBurger();
+    await loadReviews();
+});
 </script>
 
 <template>
@@ -35,12 +75,25 @@ loadBurger();
                 <p>quality/price rating: {{ burger.quality_price_rating }}</p>
             </div>
         </div>
+
         <RouterLink :to="`/restaurant/${restaurant.id}`">
             <div v-if="restaurant" class="restaurantInfo">
                 <img :src="restaurant.image" :alt="restaurant.name">
                 <h3>{{ restaurant.name }}</h3>
             </div>
         </RouterLink>
+
+        <!-- Reviews Section -->
+        <div class="reviews-container">
+            <h2>Reviews</h2>
+
+            <ReviewForm :burgerId="id" @submitted="handleReviewSubmitted" />
+
+            <div v-if="reviewsLoading" class="loading">Loading reviews...</div>
+            <div v-else-if="reviewsError" class="error">{{ reviewsError }}</div>
+            <ReviewsComponent v-else :reviews="reviews" :showBurgerInfo="false" :canEdit="true"
+                @reviewUpdated="handleReviewUpdated" />
+        </div>
     </div>
     <div v-else class="error-message">
         <p>Burger not found</p>
@@ -73,11 +126,13 @@ loadBurger();
     color: var(--accent-color-2);
     height: fit-content;
 }
+
 .itemCard:hover {
     background-color: var(--background-color);
-    img {
-        border: none;
-    }
+}
+
+.itemCard:hover img {
+    border: none;
 }
 
 .burgerHeader img {
@@ -116,9 +171,10 @@ loadBurger();
 
 .restaurantInfo:hover {
     background-color: var(--accent-color-1);
-    img {
-        border: 3px solid var(--accent-color-2);
-    }
+}
+
+.restaurantInfo:hover img {
+    border: 3px solid var(--accent-color-2);
 }
 
 .restaurantInfo img {
@@ -133,16 +189,40 @@ loadBurger();
     color: var(--accent-color-2);
 }
 
+.reviews-container {
+    margin: 20px;
+    padding: 20px;
+    border: 3px solid var(--accent-color-2);
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
+}
+
+.reviews-container h2 {
+    color: var(--accent-color-2);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.loading,
+.error {
+    text-align: center;
+    color: var(--accent-color-2);
+    padding: 1rem;
+}
+
 @media only screen and (max-width: 500px) {
     .burgerMain {
         grid-template-columns: 1fr;
     }
+
     .burgerHeader {
         margin-bottom: 0;
     }
+
     .burgerDetails {
         margin-top: 10px;
     }
+
     .burgerDetails>p {
         font-size: 0.7rem;
     }
@@ -152,6 +232,22 @@ loadBurger();
     .burgerView {
         display: grid;
         grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "main restaurant"
+            "reviews reviews";
+    }
+
+    .burgerMain {
+        grid-area: main;
+    }
+
+    .restaurantInfo {
+        grid-area: restaurant;
+    }
+
+    .reviews-container {
+        grid-area: reviews;
+        grid-column: 1 / -1;
     }
 }
 </style>
