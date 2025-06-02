@@ -108,9 +108,8 @@ onMounted(async () => {
 
             <!-- User's own review (if exists) -->
             <div v-if="userReview" class="user-review-section">
-                <h3>Your Review</h3>
                 <ReviewsComponent :reviews="[userReview]" :showBurgerInfo="false" :showRestaurantInfo="false"
-                    :showAuthor="false" :canEdit="true" @reviewUpdated="handleReviewUpdated" />
+                    :showAuthor="true" :canEdit="true" @reviewUpdated="handleReviewUpdated" />
             </div>
 
             <!-- Review form (only if user can write a review) -->
@@ -118,7 +117,6 @@ onMounted(async () => {
 
             <!-- Other users' reviews -->
             <div v-if="otherReviews.length > 0" class="other-reviews-section">
-                <h3 v-if="userReview">Other Reviews</h3>
                 <div v-if="reviewsLoading" class="loading">Loading reviews...</div>
                 <div v-else-if="reviewsError" class="error">{{ reviewsError }}</div>
                 <ReviewsComponent v-else :reviews="otherReviews" :showBurgerInfo="false" :canEdit="false"

@@ -61,7 +61,7 @@ const handleBackdropClick = (event) => {
     <div v-if="isOpen" class="modal-backdrop" @click="handleBackdropClick">
         <div class="modal-content" @click.stop>
             <div class="modal-header">
-                <h2>Login</h2>
+                <h2>Log in</h2>
                 <button class="close-btn" @click="closeModal">&times;</button>
             </div>
 
@@ -79,7 +79,7 @@ const handleBackdropClick = (event) => {
                 </div>
 
                 <button type="submit" :disabled="loading" class="submit-btn">
-                    {{ loading ? 'Logging in...' : 'Login' }}
+                    {{ loading ? 'Logging in...' : 'Log in' }}
                 </button>
 
                 <div v-if="localError || error" class="error-message">
