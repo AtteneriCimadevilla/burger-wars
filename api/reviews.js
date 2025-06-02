@@ -12,24 +12,24 @@ export default async function handler(req, res) {
       if (burger_id) {
         // Get reviews for a specific burger
         query = `
-          SELECT 
-            r.id, 
-            r.burger_id, 
-            r.user_id,
-            r.taste_rating, 
-            r.presentation_rating, 
-            r.quality_price_rating, 
-            r.comment,
-            u.username,
-            NULL as burger_name,
-            NULL as burger_image,
-            NULL as restaurant_id,
-            NULL as restaurant_name
-          FROM reviews r
-          JOIN users u ON r.user_id = u.id
-          WHERE r.burger_id = ?
-          ORDER BY r.id DESC
-        `;
+         SELECT 
+           r.id, 
+           r.burger_id, 
+           r.user_id,
+           r.taste_rating, 
+           r.presentation_rating, 
+           r.quality_price_rating, 
+           r.comment,
+           u.username,
+           NULL as burger_name,
+           NULL as burger_image,
+           NULL as restaurant_id,
+           NULL as restaurant_name
+         FROM reviews r
+         JOIN users u ON r.user_id = u.id
+         WHERE r.burger_id = ?
+         ORDER BY r.id DESC
+       `;
         args = [burger_id];
       } else if (user_id) {
         // Get reviews by a specific user (requires authentication)
@@ -43,26 +43,26 @@ export default async function handler(req, res) {
         }
 
         query = `
-          SELECT 
-            r.id,
-            r.burger_id,
-            r.user_id,
-            r.taste_rating,
-            r.presentation_rating,
-            r.quality_price_rating,
-            r.comment,
-            u.username,
-            b.name as burger_name,
-            b.image as burger_image,
-            rest.id as restaurant_id,
-            rest.name as restaurant_name
-          FROM reviews r
-          JOIN users u ON r.user_id = u.id
-          JOIN burgers b ON r.burger_id = b.id
-          JOIN restaurants rest ON b.restaurant_id = rest.id
-          WHERE r.user_id = ?
-          ORDER BY r.id DESC
-        `;
+         SELECT 
+           r.id,
+           r.burger_id,
+           r.user_id,
+           r.taste_rating,
+           r.presentation_rating,
+           r.quality_price_rating,
+           r.comment,
+           u.username,
+           b.name as burger_name,
+           b.image as burger_image,
+           rest.id as restaurant_id,
+           rest.name as restaurant_name
+         FROM reviews r
+         JOIN users u ON r.user_id = u.id
+         JOIN burgers b ON r.burger_id = b.id
+         JOIN restaurants rest ON b.restaurant_id = rest.id
+         WHERE r.user_id = ?
+         ORDER BY r.id DESC
+       `;
         args = [user_id];
       } else {
         return res
@@ -115,6 +115,15 @@ export default async function handler(req, res) {
         comment,
       } = req.body;
 
+      console.log("Received review data:", {
+        burger_id,
+        taste_rating,
+        presentation_rating,
+        quality_price_rating,
+        comment,
+        user_id: decoded.id,
+      });
+
       if (
         !burger_id ||
         taste_rating == null ||
@@ -124,12 +133,12 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Missing required fields" });
       }
 
-      // Validate ratings are between 1-10
+      // Validate ratings are between 0-5
       const ratings = [taste_rating, presentation_rating, quality_price_rating];
-      if (ratings.some((rating) => rating < 1 || rating > 10)) {
+      if (ratings.some((rating) => rating < 0 || rating > 5)) {
         return res
           .status(400)
-          .json({ error: "Ratings must be between 1 and 10" });
+          .json({ error: "Ratings must be between 0 and 5" });
       }
 
       // Check if user already reviewed this burger
@@ -146,9 +155,9 @@ export default async function handler(req, res) {
 
       const { lastInsertRowid } = await turso.execute({
         sql: `
-          INSERT INTO reviews (burger_id, user_id, taste_rating, presentation_rating, quality_price_rating, comment)
-          VALUES (?, ?, ?, ?, ?, ?)
-        `,
+         INSERT INTO reviews (burger_id, user_id, taste_rating, presentation_rating, quality_price_rating, comment)
+         VALUES (?, ?, ?, ?, ?, ?)
+       `,
         args: [
           burger_id,
           decoded.id,
@@ -159,7 +168,12 @@ export default async function handler(req, res) {
         ],
       });
 
-      return res.status(201).json({ id: lastInsertRowid });
+      console.log("Review saved successfully with ID:", lastInsertRowid);
+
+      return res.status(201).json({
+        id: lastInsertRowid,
+        message: "Review created successfully",
+      });
     } catch (err) {
       console.error("POST /api/reviews error:", err);
       if (
@@ -168,7 +182,9 @@ export default async function handler(req, res) {
       ) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res
+        .status(500)
+        .json({ error: "Internal Server Error", details: err.message });
     }
   } else {
     res.setHeader("Allow", ["GET", "POST"]);

@@ -8,6 +8,7 @@ export function useRestaurants() {
 
   const processRestaurants = () => {
     burgers.value.forEach((burger) => {
+      // Calculate rating from 0-5 scale
       burger.rating =
         Math.round(
           ((burger.taste_rating +

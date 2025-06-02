@@ -31,6 +31,7 @@ export function useRestaurant(static_id = null) {
 
   const processRestaurant = () => {
     burgers.value.forEach((burger) => {
+      // Calculate rating from 0-5 scale
       burger.rating =
         Math.round(
           ((burger.taste_rating +

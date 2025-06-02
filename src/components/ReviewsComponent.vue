@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import StarRating from '@/components/StarRating.vue';
 import useAuth from '@/composables/useAuth';
 
@@ -45,16 +45,23 @@ const cancelEditingReview = () => {
 
 const saveReview = async (reviewId) => {
     try {
+        const apiData = {
+            reviewId,
+            taste_rating: editingReview.value.taste_rating,
+            presentation_rating: editingReview.value.presentation_rating,
+            quality_price_rating: editingReview.value.quality_price_rating,
+            comment: editingReview.value.comment,
+        };
+
+        console.log('Updating review (0-5 scale):', apiData);
+
         const response = await fetch('/api/update-review', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
             },
-            body: JSON.stringify({
-                reviewId,
-                ...editingReview.value,
-            }),
+            body: JSON.stringify(apiData),
         });
 
         if (!response.ok) {
@@ -65,17 +72,19 @@ const saveReview = async (reviewId) => {
         // Emit event to parent component to update the review
         emit('reviewUpdated', {
             id: reviewId,
-            ...editingReview.value
+            ...apiData
         });
 
         editingReview.value = null;
     } catch (err) {
         error.value = err.message;
+        console.error('Review update error:', err);
     }
 };
 
 const calculateAverageRating = (review) => {
-    return Math.round(((review.taste_rating + review.presentation_rating + review.quality_price_rating) / 3) * 10) / 10;
+    const avg = (review.taste_rating + review.presentation_rating + review.quality_price_rating) / 3;
+    return Math.round(avg * 10) / 10;
 };
 
 const isOwnReview = (review) => {
@@ -109,45 +118,54 @@ const isOwnReview = (review) => {
                         <span>By: {{ review.username }}</span>
                     </div>
 
-                    <!-- Ratings Section -->
-                    <div class="ratings-section">
-                        <div v-if="editingReview?.id === review.id" class="rating-inputs">
-                            <div class="rating-input">
-                                <label>Taste:</label>
-                                <input type="range" min="1" max="10" v-model.number="editingReview.taste_rating" />
-                                <span>{{ editingReview.taste_rating }}</span>
-                            </div>
-                            <div class="rating-input">
-                                <label>Presentation:</label>
-                                <input type="range" min="1" max="10"
-                                    v-model.number="editingReview.presentation_rating" />
-                                <span>{{ editingReview.presentation_rating }}</span>
-                            </div>
-                            <div class="rating-input">
-                                <label>Quality/Price:</label>
-                                <input type="range" min="1" max="10"
-                                    v-model.number="editingReview.quality_price_rating" />
-                                <span>{{ editingReview.quality_price_rating }}</span>
-                            </div>
-                        </div>
-                        <div v-else class="rating-display">
-                            <div class="rating-row">
-                                <span>Taste: {{ review.taste_rating }}/10</span>
-                                <span>Presentation: {{ review.presentation_rating }}/10</span>
-                                <span>Quality/Price: {{ review.quality_price_rating }}/10</span>
-                            </div>
-                            <div class="average-rating">
-                                <span>Average: {{ calculateAverageRating(review) }}/10</span>
-                                <StarRating :rating="calculateAverageRating(review) / 2" :maxRating="5" />
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Restaurant Info (optional) -->
                     <RouterLink v-if="showRestaurantInfo && review.restaurant_id"
                         :to="`/restaurant/${review.restaurant_id}`" class="restaurant-link">
                         {{ review.restaurant_name }}
                     </RouterLink>
+                </div>
+
+                <!-- Ratings Section -->
+                <div class="ratings-section">
+                    <div v-if="editingReview?.id === review.id" class="rating-inputs">
+                        <p class="edit-instruction">Click stars to rate (click same star again or outside to set to 0)
+                        </p>
+                        <div class="rating-item">
+                            <label>Taste:</label>
+                            <StarRating v-model:rating="editingReview.taste_rating" :maxRating="5"
+                                :interactive="true" />
+                        </div>
+                        <div class="rating-item">
+                            <label>Presentation:</label>
+                            <StarRating v-model:rating="editingReview.presentation_rating" :maxRating="5"
+                                :interactive="true" />
+                        </div>
+                        <div class="rating-item">
+                            <label>Quality/Price:</label>
+                            <StarRating v-model:rating="editingReview.quality_price_rating" :maxRating="5"
+                                :interactive="true" />
+                        </div>
+                    </div>
+                    <div v-else class="rating-display">
+                        <div class="rating-row">
+                            <div class="rating-item">
+                                <span>Taste:</span>
+                                <StarRating :rating="review.taste_rating" :maxRating="5" />
+                            </div>
+                            <div class="rating-item">
+                                <span>Presentation:</span>
+                                <StarRating :rating="review.presentation_rating" :maxRating="5" />
+                            </div>
+                            <div class="rating-item">
+                                <span>Quality/Price:</span>
+                                <StarRating :rating="review.quality_price_rating" :maxRating="5" />
+                            </div>
+                        </div>
+                        <div class="average-rating">
+                            <span>Average: {{ calculateAverageRating(review) }}/5</span>
+                            <StarRating :rating="calculateAverageRating(review)" :maxRating="5" />
+                        </div>
+                    </div>
                 </div>
 
                 <div class="review-content">
@@ -241,62 +259,66 @@ const isOwnReview = (review) => {
 }
 
 .ratings-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    background: var(--background-color);
+    border: 2px solid var(--accent-color-2);
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .rating-display {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .rating-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    font-size: 0.9rem;
+    gap: 1.5rem;
+    justify-content: space-around;
+}
+
+.rating-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.rating-item span,
+.rating-item label {
+    font-weight: 600;
     color: var(--accent-color-2);
+    font-size: 0.9rem;
 }
 
 .average-rating {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--accent-color-2);
     font-weight: 600;
     color: var(--accent-color-2);
 }
 
 .rating-inputs {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-around;
 }
 
-.rating-input {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.edit-instruction {
+    width: 100%;
+    text-align: center;
+    color: var(--accent-color-2);
     font-size: 0.8rem;
-}
-
-.rating-input label {
-    min-width: 80px;
-    color: var(--accent-color-2);
-    font-weight: 600;
-}
-
-.rating-input input[type="range"] {
-    flex: 1;
-}
-
-.rating-input span {
-    min-width: 30px;
-    color: var(--accent-color-2);
-    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 1rem;
 }
 
 .review-content {
@@ -378,14 +400,16 @@ const isOwnReview = (review) => {
 }
 
 @media (max-width: 768px) {
-    .review-header {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-
     .rating-row {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+    }
+
+    .rating-inputs {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
     }
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useBurger } from '@/composables';
 import StarRating from '@/components/StarRating.vue';
@@ -10,10 +10,18 @@ import ReviewsComponent from '@/components/ReviewsComponent.vue';
 const route = useRoute();
 const id = route.params.id;
 
-const { burger, restaurant, error, loading, loadBurger } = useBurger(id);
 const reviews = ref([]);
 const reviewsLoading = ref(true);
 const reviewsError = ref('');
+
+const { burger, restaurant, error, loading, loadBurger } = useBurger(id);
+
+// Convert 1-10 scale to 0-5 scale for display
+const burgerRating = computed(() => {
+    if (!burger.value) return 0;
+    const avg = (burger.value.taste_rating + burger.value.presentation_rating + burger.value.quality_price_rating) / 3;
+    return avg / 2; // Convert to 5-star scale
+});
 
 const loadReviews = async () => {
     try {
@@ -35,6 +43,8 @@ const loadReviews = async () => {
 const handleReviewSubmitted = () => {
     // Reload reviews after a new one is submitted
     loadReviews();
+    // Also reload burger to update ratings
+    loadBurger();
 };
 
 const handleReviewUpdated = (updatedReview) => {
@@ -45,6 +55,8 @@ const handleReviewUpdated = (updatedReview) => {
             ...updatedReview
         };
     }
+    // Also reload burger to update ratings
+    loadBurger();
 };
 
 onMounted(async () => {
@@ -62,7 +74,10 @@ onMounted(async () => {
                 <h3>{{ burger.name }}</h3>
                 <img :src="burger.image" :alt="burger.name">
                 <p>{{ burger.description }}</p>
-                <StarRating :rating="burger.rating" />
+                <div class="burger-rating">
+                    <StarRating :rating="burgerRating" :maxRating="5" />
+                    <span class="rating-value">{{ Math.round(burgerRating * 10) / 10 }}/5</span>
+                </div>
             </div>
             <div class="burgerDetails">
                 <p v-if="burger.amount">{{ burger.amount }}g. {{ burger.main_ingredient }}</p>
@@ -70,9 +85,17 @@ onMounted(async () => {
                 <p>{{ burger.bread }}</p>
                 <p>with {{ burger.ingredients }}</p>
                 <p>price: {{ burger.price }} €</p>
-                <p>taste rating: {{ burger.taste_rating }}</p>
-                <p>presentation rating: {{ burger.presentation_rating }}</p>
-                <p>quality/price rating: {{ burger.quality_price_rating }}</p>
+                <div class="ratings-breakdown">
+                    <p>Taste:
+                        <StarRating :rating="burger.taste_rating / 2" :maxRating="5" />
+                    </p>
+                    <p>Presentation:
+                        <StarRating :rating="burger.presentation_rating / 2" :maxRating="5" />
+                    </p>
+                    <p>Quality/Price:
+                        <StarRating :rating="burger.quality_price_rating / 2" :maxRating="5" />
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -127,6 +150,19 @@ onMounted(async () => {
     height: fit-content;
 }
 
+.burger-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.rating-value {
+    margin-top: 0.25rem;
+    font-weight: 600;
+    color: var(--accent-color-2);
+}
+
 .itemCard:hover {
     background-color: var(--background-color);
 }
@@ -153,6 +189,19 @@ onMounted(async () => {
 .burgerDetails p {
     margin: 5px;
     font-size: 0.8rem;
+}
+
+.ratings-breakdown {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ratings-breakdown p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .restaurantInfo {

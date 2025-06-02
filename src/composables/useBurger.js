@@ -19,6 +19,17 @@ export function useBurger(id) {
       if (!burgerResponse.ok) throw new Error("Failed to fetch burger");
 
       const burgerData = await burgerResponse.json();
+
+      // Calculate rating from 0-5 scale
+      burgerData.rating =
+        Math.round(
+          ((burgerData.taste_rating +
+            burgerData.presentation_rating +
+            burgerData.quality_price_rating) /
+            3) *
+            100
+        ) / 100;
+
       burger.value = burgerData;
 
       const restaurant_id = burgerData.restaurant_id;

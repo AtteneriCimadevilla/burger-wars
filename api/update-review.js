@@ -25,12 +25,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Validate ratings are between 1-10
+    // Validate ratings are between 0-5
     const ratings = [taste_rating, presentation_rating, quality_price_rating];
-    if (ratings.some((rating) => rating < 1 || rating > 10)) {
-      return res
-        .status(400)
-        .json({ error: "Ratings must be between 1 and 10" });
+    if (ratings.some((rating) => rating < 0 || rating > 5)) {
+      return res.status(400).json({ error: "Ratings must be between 0 and 5" });
     }
 
     // Check if the review belongs to the authenticated user

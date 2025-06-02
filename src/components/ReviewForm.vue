@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import useAuth from '@/composables/useAuth';
+import StarRating from '@/components/StarRating.vue';
 
 const { isAuthenticated, user } = useAuth();
 
@@ -17,9 +18,9 @@ const props = defineProps({
 
 const emit = defineEmits(['submitted']);
 
-const taste = ref(5);
-const presentation = ref(5);
-const qualityPrice = ref(5);
+const taste = ref(0);
+const presentation = ref(0);
+const qualityPrice = ref(0);
 const comment = ref('');
 
 const error = ref('');
@@ -27,21 +28,28 @@ const success = ref(false);
 const loading = ref(false);
 
 const submitReview = async () => {
-    if (!isAuthenticated.value) {
-        error.value = 'You must be logged in to submit a review';
-        return;
-    }
-
     loading.value = true;
     error.value = '';
     success.value = false;
 
+    if (!isAuthenticated.value) {
+        error.value = 'You must be logged in to submit a review';
+        loading.value = false;
+        return;
+    }
+
     try {
+        console.log('Submitting ratings (0-5 scale):', {
+            taste: taste.value,
+            presentation: presentation.value,
+            qualityPrice: qualityPrice.value
+        });
+
         const response = await fetch('/api/reviews', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('jwt_token')}`
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`
             },
             body: JSON.stringify({
                 burger_id: props.burgerId,
@@ -60,7 +68,7 @@ const submitReview = async () => {
 
         success.value = true;
         error.value = '';
-        taste.value = presentation.value = qualityPrice.value = 5;
+        taste.value = presentation.value = qualityPrice.value = 0;
         comment.value = '';
 
         emit('submitted');
@@ -68,6 +76,7 @@ const submitReview = async () => {
     } catch (err) {
         error.value = err.message;
         success.value = false;
+        console.error('Review submission error:', err);
     } finally {
         loading.value = false;
     }
@@ -83,20 +92,23 @@ const submitReview = async () => {
         <div v-else>
             <h3>Submit your review</h3>
             <p class="reviewer">Reviewing as: <strong>{{ user?.username }}</strong></p>
+            <p class="instruction">Click stars to rate (click same star again or outside to set to 0)</p>
 
-            <div class="field">
-                <label for="taste">Taste: {{ taste }}/10</label>
-                <input type="range" min="1" max="10" v-model.number="taste" />
-            </div>
+            <div class="ratings-container">
+                <div class="rating-field">
+                    <label>Taste:</label>
+                    <StarRating v-model:rating="taste" :maxRating="5" :interactive="true" />
+                </div>
 
-            <div class="field">
-                <label for="presentation">Presentation: {{ presentation }}/10</label>
-                <input type="range" min="1" max="10" v-model.number="presentation" />
-            </div>
+                <div class="rating-field">
+                    <label>Presentation:</label>
+                    <StarRating v-model:rating="presentation" :maxRating="5" :interactive="true" />
+                </div>
 
-            <div class="field">
-                <label for="quality">Quality/Price: {{ qualityPrice }}/10</label>
-                <input type="range" min="1" max="10" v-model.number="qualityPrice" />
+                <div class="rating-field">
+                    <label>Quality/Price:</label>
+                    <StarRating v-model:rating="qualityPrice" :maxRating="5" :interactive="true" />
+                </div>
             </div>
 
             <div class="field">
@@ -135,8 +147,36 @@ const submitReview = async () => {
 
 .reviewer {
     color: var(--accent-color-2);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     font-size: 0.9rem;
+}
+
+.instruction {
+    color: var(--accent-color-2);
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.ratings-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+}
+
+.rating-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 120px;
+}
+
+.rating-field label {
+    color: var(--accent-color-2);
+    font-weight: 600;
 }
 
 .field {
@@ -148,11 +188,6 @@ const submitReview = async () => {
     margin-bottom: 0.5rem;
     color: var(--accent-color-2);
     font-weight: 600;
-}
-
-.field input[type="range"] {
-    width: 100%;
-    margin-bottom: 0.5rem;
 }
 
 .field textarea {
@@ -193,5 +228,12 @@ const submitReview = async () => {
 .success {
     color: #28a745;
     margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .ratings-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 </style>
