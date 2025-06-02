@@ -1,15 +1,16 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import useAuth from '@/composables/useAuth';
 import ReviewsComponent from '@/components/ReviewsComponent.vue';
 
 const router = useRouter();
-const { user, isAuthenticated, fetchUser } = useAuth();
+const { user, isAuthenticated, fetchUser, init } = useAuth();
 
 const reviews = ref([]);
 const loading = ref(true);
 const error = ref('');
+const authInitialized = ref(false);
 
 // Profile form data
 const profileForm = ref({
@@ -23,13 +24,27 @@ const profileError = ref('');
 const profileSuccess = ref('');
 const profileLoading = ref(false);
 
-// Redirect if not authenticated
-const initializeProfile = async () => {
-    if (!isAuthenticated.value) {
-        router.push({ name: 'home' });
-        return;
-    }
+// Initialize authentication first
+const initializeAuth = async () => {
+    try {
+        await init();
+        authInitialized.value = true;
 
+        // Only redirect if auth is initialized and user is not authenticated
+        if (!isAuthenticated.value) {
+            router.push({ name: 'home' });
+            return;
+        }
+
+        await initializeProfile();
+    } catch (error) {
+        console.error('Auth initialization error:', error);
+        authInitialized.value = true;
+        router.push({ name: 'home' });
+    }
+};
+
+const initializeProfile = async () => {
     // Initialize profile form with user data
     if (user.value) {
         profileForm.value.username = user.value.username;
@@ -39,13 +54,22 @@ const initializeProfile = async () => {
     await loadUserReviews();
 };
 
-onMounted(initializeProfile);
+// Watch for changes in authentication state
+watch(isAuthenticated, (newValue) => {
+    if (authInitialized.value && !newValue) {
+        router.push({ name: 'home' });
+    }
+});
+
+onMounted(initializeAuth);
 
 const loadUserReviews = async () => {
+    if (!user.value) return;
+
     try {
         const response = await fetch(`/api/reviews?user_id=${user.value.id}`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
             },
         });
 
@@ -87,7 +111,7 @@ const updateProfile = async () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
             },
             body: JSON.stringify(updateData),
         });
@@ -131,21 +155,32 @@ const averageRating = computed(() => {
 </script>
 
 <template>
-    <div class="profile-container">
-        <div class="profile-sidebar">
-            <!-- Profile Picture -->
-            <div class="profile-picture">
-                <img src="/img/placeholder.jpg?height=150&width=150" alt="Profile Picture" />
-            </div>
+    <div v-if="!authInitialized" class="loading-container">
+        <div class="loading">Loading...</div>
+    </div>
 
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="loved-btn">
-                    <span class="heart">♥</span>
-                </button>
-                <button class="hated-btn">
-                    <span class="heart">💔</span>
-                </button>
+    <div v-else-if="!isAuthenticated" class="loading-container">
+        <div class="loading">Redirecting...</div>
+    </div>
+
+    <div v-else class="profile-container">
+        <div class="profile-sidebar">
+            <!-- Profile Picture and Action Buttons -->
+            <div class="profile-picture-section">
+                <!-- Profile Picture -->
+                <div class="profile-picture">
+                    <img src="/img/placeholder.jpg?height=150&width=150" alt="Profile Picture" />
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="loved-btn">
+                        <span class="heart">♥</span>
+                    </button>
+                    <button class="hated-btn">
+                        <span class="heart">💔</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Badges Section -->
@@ -155,7 +190,7 @@ const averageRating = computed(() => {
                     <span>Reviews: {{ reviews.length }}</span>
                 </div>
                 <div class="badge">
-                    <span>Avg Rating: {{ averageRating }}/10</span>
+                    <span>Avg Rating: {{ averageRating }}/5</span>
                 </div>
             </div>
 
@@ -199,12 +234,27 @@ const averageRating = computed(() => {
 
             <div v-if="loading" class="loading">Loading reviews...</div>
             <div v-else-if="error" class="error">{{ error }}</div>
-            <ReviewsComponent v-else :reviews="reviews" :canEdit="true" @reviewUpdated="handleReviewUpdated" />
+            <ReviewsComponent v-else :reviews="reviews" :canEdit="true" :showBurgerInfo="true"
+                :showRestaurantInfo="true" :showAuthor="false" :showAverageRating="false" :compactRatings="true"
+                :profileLayout="true" @reviewUpdated="handleReviewUpdated" />
         </div>
     </div>
 </template>
 
 <style scoped>
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.loading {
+    text-align: center;
+    color: var(--accent-color-2);
+    font-size: 1.2rem;
+}
+
 .profile-container {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -352,18 +402,9 @@ const averageRating = computed(() => {
     margin-top: 0.5rem;
 }
 
-.loading,
 .error {
     text-align: center;
     color: var(--accent-color-2);
     padding: 2rem;
-}
-
-@media (max-width: 768px) {
-    .profile-container {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1rem;
-    }
 }
 </style>

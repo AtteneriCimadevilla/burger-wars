@@ -6,22 +6,17 @@ import StarRating from '@/components/StarRating.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import ReviewForm from '@/components/ReviewForm.vue';
 import ReviewsComponent from '@/components/ReviewsComponent.vue';
+import useAuth from '@/composables/useAuth';
 
 const route = useRoute();
 const id = route.params.id;
 
+const { burger, restaurant, error, loading, loadBurger } = useBurger(id);
+const { isAuthenticated, user } = useAuth();
+
 const reviews = ref([]);
 const reviewsLoading = ref(true);
 const reviewsError = ref('');
-
-const { burger, restaurant, error, loading, loadBurger } = useBurger(id);
-
-// Convert 1-10 scale to 0-5 scale for display
-const burgerRating = computed(() => {
-    if (!burger.value) return 0;
-    const avg = (burger.value.taste_rating + burger.value.presentation_rating + burger.value.quality_price_rating) / 3;
-    return avg / 2; // Convert to 5-star scale
-});
 
 const loadReviews = async () => {
     try {
@@ -43,8 +38,6 @@ const loadReviews = async () => {
 const handleReviewSubmitted = () => {
     // Reload reviews after a new one is submitted
     loadReviews();
-    // Also reload burger to update ratings
-    loadBurger();
 };
 
 const handleReviewUpdated = (updatedReview) => {
@@ -55,9 +48,23 @@ const handleReviewUpdated = (updatedReview) => {
             ...updatedReview
         };
     }
-    // Also reload burger to update ratings
-    loadBurger();
 };
+
+// Check if current user has already reviewed this burger
+const userReview = computed(() => {
+    if (!isAuthenticated.value || !user.value) return null;
+    return reviews.value.find(review => review.user_id === user.value.id);
+});
+
+// Reviews from other users (excluding current user's review)
+const otherReviews = computed(() => {
+    if (!isAuthenticated.value || !user.value) return reviews.value;
+    return reviews.value.filter(review => review.user_id !== user.value.id);
+});
+
+const canWriteReview = computed(() => {
+    return isAuthenticated.value && !userReview.value;
+});
 
 onMounted(async () => {
     await loadBurger();
@@ -74,10 +81,7 @@ onMounted(async () => {
                 <h3>{{ burger.name }}</h3>
                 <img :src="burger.image" :alt="burger.name">
                 <p>{{ burger.description }}</p>
-                <div class="burger-rating">
-                    <StarRating :rating="burgerRating" :maxRating="5" />
-                    <span class="rating-value">{{ Math.round(burgerRating * 10) / 10 }}/5</span>
-                </div>
+                <StarRating :rating="burger.rating" />
             </div>
             <div class="burgerDetails">
                 <p v-if="burger.amount">{{ burger.amount }}g. {{ burger.main_ingredient }}</p>
@@ -85,17 +89,9 @@ onMounted(async () => {
                 <p>{{ burger.bread }}</p>
                 <p>with {{ burger.ingredients }}</p>
                 <p>price: {{ burger.price }} €</p>
-                <div class="ratings-breakdown">
-                    <p>Taste:
-                        <StarRating :rating="burger.taste_rating / 2" :maxRating="5" />
-                    </p>
-                    <p>Presentation:
-                        <StarRating :rating="burger.presentation_rating / 2" :maxRating="5" />
-                    </p>
-                    <p>Quality/Price:
-                        <StarRating :rating="burger.quality_price_rating / 2" :maxRating="5" />
-                    </p>
-                </div>
+                <p>taste rating: {{ burger.taste_rating }}</p>
+                <p>presentation rating: {{ burger.presentation_rating }}</p>
+                <p>quality/price rating: {{ burger.quality_price_rating }}</p>
             </div>
         </div>
 
@@ -110,12 +106,29 @@ onMounted(async () => {
         <div class="reviews-container">
             <h2>Reviews</h2>
 
-            <ReviewForm :burgerId="id" @submitted="handleReviewSubmitted" />
+            <!-- User's own review (if exists) -->
+            <div v-if="userReview" class="user-review-section">
+                <h3>Your Review</h3>
+                <ReviewsComponent :reviews="[userReview]" :showBurgerInfo="false" :showRestaurantInfo="false"
+                    :showAuthor="false" :canEdit="true" @reviewUpdated="handleReviewUpdated" />
+            </div>
 
-            <div v-if="reviewsLoading" class="loading">Loading reviews...</div>
-            <div v-else-if="reviewsError" class="error">{{ reviewsError }}</div>
-            <ReviewsComponent v-else :reviews="reviews" :showBurgerInfo="false" :canEdit="true"
-                @reviewUpdated="handleReviewUpdated" />
+            <!-- Review form (only if user can write a review) -->
+            <ReviewForm v-if="canWriteReview" :burgerId="id" @submitted="handleReviewSubmitted" />
+
+            <!-- Other users' reviews -->
+            <div v-if="otherReviews.length > 0" class="other-reviews-section">
+                <h3 v-if="userReview">Other Reviews</h3>
+                <div v-if="reviewsLoading" class="loading">Loading reviews...</div>
+                <div v-else-if="reviewsError" class="error">{{ reviewsError }}</div>
+                <ReviewsComponent v-else :reviews="otherReviews" :showBurgerInfo="false" :canEdit="false"
+                    @reviewUpdated="handleReviewUpdated" />
+            </div>
+
+            <!-- No reviews message -->
+            <div v-if="!reviewsLoading && !reviewsError && reviews.length === 0" class="no-reviews">
+                <p>No reviews yet. Be the first to review this burger!</p>
+            </div>
         </div>
     </div>
     <div v-else class="error-message">
@@ -150,19 +163,6 @@ onMounted(async () => {
     height: fit-content;
 }
 
-.burger-rating {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 0.5rem;
-}
-
-.rating-value {
-    margin-top: 0.25rem;
-    font-weight: 600;
-    color: var(--accent-color-2);
-}
-
 .itemCard:hover {
     background-color: var(--background-color);
 }
@@ -189,19 +189,6 @@ onMounted(async () => {
 .burgerDetails p {
     margin: 5px;
     font-size: 0.8rem;
-}
-
-.ratings-breakdown {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.ratings-breakdown p {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .restaurantInfo {
@@ -252,11 +239,34 @@ onMounted(async () => {
     margin-bottom: 20px;
 }
 
+.user-review-section,
+.other-reviews-section {
+    margin-bottom: 2rem;
+}
+
+.user-review-section h3,
+.other-reviews-section h3 {
+    color: var(--accent-color-2);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-color-2);
+}
+
 .loading,
 .error {
     text-align: center;
     color: var(--accent-color-2);
     padding: 1rem;
+}
+
+.no-reviews {
+    text-align: center;
+    color: var(--accent-color-2);
+    padding: 2rem;
+    background: var(--background-color);
+    border: 2px solid var(--accent-color-2);
+    border-radius: 5px;
+    margin-top: 1rem;
 }
 
 @media only screen and (max-width: 500px) {
