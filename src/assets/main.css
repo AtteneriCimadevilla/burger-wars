@@ -36,6 +36,9 @@ h4 {
     color: var(--accent-color-2);
     justify-self: center;
 }
+p {
+    line-height: 1.2;
+}
 
 a {
     text-decoration: none;

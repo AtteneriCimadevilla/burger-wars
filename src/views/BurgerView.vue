@@ -88,6 +88,7 @@ onMounted(async () => {
                 <p v-else>{{ burger.main_ingredient }}</p>
                 <p>{{ burger.bread }}</p>
                 <p>with {{ burger.ingredients }}</p>
+                <p v-if="burger.allergens">allergens: {{ burger.allergens }}</p>
                 <p>price: {{ burger.price }} €</p>
                 <p>taste rating: {{ burger.taste_rating }}</p>
                 <p>presentation rating: {{ burger.presentation_rating }}</p>
