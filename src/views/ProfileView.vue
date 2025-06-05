@@ -175,7 +175,7 @@ const averageRating = computed(() => {
                 <!-- Action Buttons -->
                 <div class="action-buttons">
                     <button class="loved-btn">
-                        <span class="heart">♥</span>
+                        <span class="heart">❤️</span>
                     </button>
                     <button class="hated-btn">
                         <span class="heart">💔</span>
@@ -183,14 +183,35 @@ const averageRating = computed(() => {
                 </div>
             </div>
 
-            <!-- Badges Section -->
-            <div class="badges-section">
-                <h3>BADGES</h3>
-                <div class="badge">
-                    <span>Reviews: {{ reviews.length }}</span>
-                </div>
-                <div class="badge">
-                    <span>Avg Rating: {{ averageRating }}/5</span>
+            <!-- Badge Section -->
+            <div class="badge-section">
+                <div class="review-badge">
+                    <div class="badge-container">
+                        <div class="badge-circle">
+                            <!-- Simple burger icon -->
+                            <svg viewBox="0 0 60 60" class="burger-icon">
+                                <!-- Bottom bun -->
+                                <ellipse cx="30" cy="50" rx="20" ry="5" fill="#D2691E" />
+                                <!-- Lettuce -->
+                                <ellipse cx="30" cy="45" rx="18" ry="3" fill="#228B22" />
+                                <!-- Meat -->
+                                <ellipse cx="30" cy="40" rx="16" ry="4" fill="#8B4513" />
+                                <!-- Cheese -->
+                                <ellipse cx="30" cy="35" rx="17" ry="2" fill="#FFD700" />
+                                <!-- Top bun -->
+                                <ellipse cx="30" cy="25" rx="18" ry="10" fill="#DEB887" />
+                                <!-- Sesame seeds -->
+                                <circle cx="22" cy="22" r="1" fill="#F5DEB3" />
+                                <circle cx="30" cy="20" r="1" fill="#F5DEB3" />
+                                <circle cx="38" cy="24" r="1" fill="#F5DEB3" />
+                            </svg>
+                        </div>
+                        <!-- Review count badge -->
+                        <div class="count-badge">
+                            {{ reviews.length }}
+                        </div>
+                    </div>
+                    <span class="badge-label">Reviews</span>
                 </div>
             </div>
 
@@ -309,26 +330,67 @@ const averageRating = computed(() => {
     background-color: var(--accent-color-1);
 }
 
-.badges-section {
+.badge-section {
     background: var(--accent-color-1);
     border: 3px solid var(--accent-color-2);
     border-radius: 10px;
-    padding: 1rem;
+    padding: 1.5rem;
     text-align: center;
 }
 
-.badges-section h3 {
-    color: var(--accent-color-2);
-    margin-bottom: 1rem;
+.review-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
-.badge {
-    background: var(--background-color);
-    border: 2px solid var(--accent-color-2);
-    border-radius: 5px;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
+.badge-container {
+    position: relative;
+    display: inline-block;
+}
+
+.badge-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--accent-color-2), #8b0814);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--background-color);
+}
+
+.burger-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.count-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: var(--accent-color-1);
     color: var(--accent-color-2);
+    border: 2px solid var(--accent-color-2);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.badge-label {
+    color: var(--accent-color-2);
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .profile-form {
@@ -406,5 +468,29 @@ const averageRating = computed(() => {
     text-align: center;
     color: var(--accent-color-2);
     padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .badge-circle {
+        width: 70px;
+        height: 70px;
+    }
+
+    .burger-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .count-badge {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+    }
 }
 </style>

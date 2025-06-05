@@ -110,7 +110,7 @@ const isOwnReview = (review) => {
 
 // Get restaurant image from a mapping or use a placeholder
 const getRestaurantImage = (restaurantId) => {
-    return `/img/rest${restaurantId}.png`;
+    return `/img/rest${restaurantId}.png` || '/img/placeholder.jpg?height=60&width=60';
 };
 </script>
 
@@ -127,7 +127,7 @@ const getRestaurantImage = (restaurantId) => {
                 <!-- Unified Header Row -->
                 <div class="review-header" :class="{ 'profile-layout': props.profileLayout }">
                     <!-- Profile Layout: Burger Info -->
-                    <RouterLink v-if="props.profileLayout && props.showBurgerInfo && review.burger_id" 
+                    <RouterLink v-if="props.profileLayout && props.showBurgerInfo && review.burger_id"
                         :to="`/burger/${review.burger_id}`" class="info-block burger-block">
                         <div class="info-content">
                             <img v-if="review.burger_image" :src="review.burger_image" :alt="review.burger_name"
@@ -137,9 +137,11 @@ const getRestaurantImage = (restaurantId) => {
                     </RouterLink>
 
                     <!-- Burger Layout: Author Info -->
-                    <div v-if="!props.profileLayout && props.showAuthor && review.username" class="info-block author-block">
+                    <div v-if="!props.profileLayout && props.showAuthor && review.username"
+                        class="info-block author-block">
                         <div class="info-content">
-                            <img src="/img/placeholder.jpg?height=50&width=50" :alt="review.username" class="info-image" />
+                            <img src="/img/placeholder.jpg?height=50&width=50" :alt="review.username"
+                                class="info-image" />
                             <span class="info-name">{{ review.username }}</span>
                         </div>
                     </div>
@@ -151,15 +153,18 @@ const getRestaurantImage = (restaurantId) => {
                             <div class="rating-column">
                                 <div class="rating-item">
                                     <label class="rating-label">Taste:</label>
-                                    <StarRating v-model:rating="editingReview.taste_rating" :maxRating="5" :interactive="true" />
+                                    <StarRating v-model:rating="editingReview.taste_rating" :maxRating="5"
+                                        :interactive="true" />
                                 </div>
                                 <div class="rating-item">
                                     <label class="rating-label">Presentation:</label>
-                                    <StarRating v-model:rating="editingReview.presentation_rating" :maxRating="5" :interactive="true" />
+                                    <StarRating v-model:rating="editingReview.presentation_rating" :maxRating="5"
+                                        :interactive="true" />
                                 </div>
                                 <div class="rating-item">
                                     <label class="rating-label">Quality/Price:</label>
-                                    <StarRating v-model:rating="editingReview.quality_price_rating" :maxRating="5" :interactive="true" />
+                                    <StarRating v-model:rating="editingReview.quality_price_rating" :maxRating="5"
+                                        :interactive="true" />
                                 </div>
                             </div>
                         </div>
@@ -191,11 +196,12 @@ const getRestaurantImage = (restaurantId) => {
                     </RouterLink>
                 </div>
 
-                <!-- Comment Row -->
-                <div class="review-content">
+                <!-- Comment Row (only show if there's a comment or if editing) -->
+                <div v-if="editingReview?.id === review.id || (review.comment && review.comment.trim())"
+                    class="review-content">
                     <textarea v-if="editingReview?.id === review.id" v-model="editingReview.comment"
                         placeholder="Your review..." rows="4"></textarea>
-                    <p v-else>{{ review.comment || 'No comment provided.' }}</p>
+                    <p v-else>{{ review.comment }}</p>
                 </div>
 
                 <!-- Action Buttons -->
@@ -323,7 +329,8 @@ const getRestaurantImage = (restaurantId) => {
 /* Unified Ratings Block */
 .ratings-block {
     display: flex;
-    justify-content: center; /* Changed from flex-end to center */
+    justify-content: center;
+    /* Changed from flex-end to center */
     background: var(--background-color);
     border: 2px solid var(--accent-color-2);
     border-radius: 5px;
@@ -457,28 +464,29 @@ const getRestaurantImage = (restaurantId) => {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
     .review-header,
     .review-header.profile-layout {
         grid-template-columns: 1fr;
         gap: 0.5rem;
     }
-    
+
     .info-content {
         justify-content: center;
     }
-    
+
     .restaurant-block .info-image {
         width: 50px;
         height: 50px;
     }
-    
+
     .rating-label {
         min-width: 60px;
         font-size: 0.7rem;
     }
-    
+
     .ratings-block {
-        justify-content: center !important;
+        justify-content: center;
     }
 }
 </style>
