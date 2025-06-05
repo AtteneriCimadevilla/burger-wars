@@ -110,7 +110,7 @@ const isOwnReview = (review) => {
 
 // Get restaurant image from a mapping or use a placeholder
 const getRestaurantImage = (restaurantId) => {
-    return `/img/rest${restaurantId}.png` || '/img/placeholder.jpg?height=60&width=60';
+    return `/img/rest${restaurantId}.png`;
 };
 </script>
 

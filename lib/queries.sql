@@ -105,7 +105,10 @@ VALUES (
         'Brutal58',
         'C/ Italia, 33, 03003 Alicante',
         'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3129.38009398037!2d-0.4916238!3d38.3401838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd62370d8766d763%3A0xaaa43b99cf3e2227!2sBrutal58!5e0!3m2!1sen!2ses!4v1748974954326!5m2!1sen!2ses',
-        '/img/placeholder.jpg?height=60&width=60',
+        '/img/rest014.png',
         'https://www.grupobrutal58.com/'
     );
 
+UPDATE restaurants
+SET image = '/img/rest014.png'
+WHERE id = '014';

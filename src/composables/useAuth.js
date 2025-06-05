@@ -18,6 +18,8 @@ export default function useAuth() {
     token.value = authToken;
     user.value = userData;
     localStorage.setItem("jwt_token", authToken);
+    // Also store the token with the key that the API expects
+    localStorage.setItem("auth_token", authToken);
     console.log("Auth data set:", { token: authToken, user: userData });
   };
 
@@ -25,6 +27,7 @@ export default function useAuth() {
     token.value = null;
     user.value = null;
     localStorage.removeItem("jwt_token");
+    localStorage.removeItem("auth_token");
     console.log("Auth data cleared");
   };
 

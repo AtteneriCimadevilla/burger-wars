@@ -45,11 +45,19 @@ const submitReview = async () => {
             qualityPrice: qualityPrice.value
         });
 
+        // Get the token from localStorage
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            throw new Error('Authentication token not found. Please log in again.');
+        }
+
+        console.log('Using auth token:', token);
+
         const response = await fetch('/api/reviews', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 burger_id: props.burgerId,
@@ -60,7 +68,11 @@ const submitReview = async () => {
             })
         });
 
+        // Log the full response for debugging
+        console.log('Review submission response status:', response.status);
+
         const data = await response.json();
+        console.log('Review submission response data:', data);
 
         if (!response.ok) {
             throw new Error(data.error || 'Error submitting review');

@@ -22,6 +22,9 @@ CREATE TABLE IF NOT EXISTS burgers (
     more_ingredients TEXT,
     allergens TEXT,
     price REAL,
+    taste_rating REAL,
+    presentation_rating REAL,
+    quality_price_rating REAL,
     image TEXT,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON UPDATE CASCADE
 );
@@ -36,9 +39,9 @@ CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     burger_id TEXT NOT NULL,
     user_id INTEGER NOT NULL,
-    taste_rating INTEGER NOT NULL,
-    presentation_rating INTEGER NOT NULL,
-    quality_price_rating INTEGER NOT NULL,
+    taste_rating REAL NOT NULL,
+    presentation_rating REAL NOT NULL,
+    quality_price_rating REAL NOT NULL,
     comment TEXT,
     FOREIGN KEY (burger_id) REFERENCES burgers (id) ON UPDATE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE

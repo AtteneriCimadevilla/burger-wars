@@ -110,7 +110,16 @@ VALUES (
         'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.1143426287085!2d-0.4960818416719062!3d38.34732223117356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6237ded05ab1f1%3A0xfff72de5db8e3934!2sLiberty%20Kitchen!5e0!3m2!1sen!2ses!4v1740259350806!5m2!1sen!2ses',
         '/img/rest013.png',
         'https://www.instagram.com/libertykitchenalicante/'
+    ),
+    (
+        '014',
+        'Brutal58',
+        'C/ Italia, 33, 03003 Alicante',
+        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3129.38009398037!2d-0.4916238!3d38.3401838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd62370d8766d763%3A0xaaa43b99cf3e2227!2sBrutal58!5e0!3m2!1sen!2ses!4v1748974954326!5m2!1sen!2ses',
+        '/img/rest014.png',
+        'https://www.grupobrutal58.com/'
     );
+
 INSERT INTO
     burgers (
         id,
@@ -121,7 +130,11 @@ INSERT INTO
         bread,
         ingredients,
         more_ingredients,
+        allergens,
         price,
+        taste_rating,
+        presentation_rating,
+        quality_price_rating,
         image
     )
 VALUES (
@@ -133,7 +146,11 @@ VALUES (
         'potato roll',
         'thin pickle slices',
         NULL,
+        NULL,
         15.00,
+        5,
+        4.5,
+        4.5,
         '/img/001.png'
     ),
     (
@@ -145,7 +162,11 @@ VALUES (
         'brioche',
         'provolone cheese, caramelised in cocacola onion, Italian guanciale',
         NULL,
+        NULL,
         11.00,
+        5,
+        5,
+        4.5,
         '/img/002.png'
     ),
     (
@@ -154,10 +175,14 @@ VALUES (
         '002',
         '''Vaca Vieja'' Beef',
         200,
-        'Brioche',
+        'Brioche (gluten-free bread available)',
         'Batavia Lettuce, Fresh Tomato, Red Onion, English Cheddar Cheese, CIRCO Sauce',
         NULL,
+        'eggs, dairy, mustard, fish',
         12.00,
+        4.5,
+        4.5,
+        4.5,
         '/img/003.png'
     ),
     (
@@ -169,7 +194,11 @@ VALUES (
         'burger bun',
         'goat cheese, tomato marmalade, crunchy onion',
         NULL,
-        10.00,
+        'gluten, eggs, soy, dairy, mustard, sesame seeds',
+        5.00,
+        4,
+        4,
+        4,
         '/img/004.png'
     ),
     (
@@ -181,7 +210,11 @@ VALUES (
         'burger bun',
         'cheddar cheese, bacon, lettuce, tomato, grilled onion',
         NULL,
+        'gluten, eggs, soy, dairy, mustard, sesame seeds',
         12.50,
+        4,
+        3.5,
+        4,
         '/img/005.png'
     ),
     (
@@ -193,7 +226,11 @@ VALUES (
         'Brioche',
         'Monterey Jack Cheese, Low Temperature Korean Pulled Pork, Maple Caramelised Bacon Bits, Gangnam Style Sauce, Takis Rain.',
         NULL,
+        NULL,
         14.00,
+        5,
+        4.5,
+        4,
         '/img/006.png'
     ),
     (
@@ -205,7 +242,11 @@ VALUES (
         'artisanal bread',
         'smoked cheese, bacon, chipotle cream, crunchy onion, mesclun, tomato, honey mustard sauce',
         NULL,
+        NULL,
         13.50,
+        4,
+        4,
+        4,
         '/img/007.png'
     ),
     (
@@ -217,8 +258,12 @@ VALUES (
         'artisanal bread',
         'bourbon sauce, emmenthal cheese, blue cheese, bacon, mesclun, honey mustard sauce, tomato',
         NULL,
+        NULL,
         12.50,
-        '/img/008.png'
+        4.5,
+        4.5,
+        4,
+        '/img/004.png'
     ),
     (
         '009',
@@ -229,7 +274,11 @@ VALUES (
         'baker''s bread',
         'fresh artisan cheese, za''atar, rocket, lemon, lettuce, A+ tomato, thinly sliced onion, sundried tomato mayo',
         NULL,
+        NULL,
         13.00,
+        5,
+        4.5,
+        4.5,
         '/img/009.png'
     ),
     (
@@ -237,11 +286,15 @@ VALUES (
         'Brie Burger',
         '013',
         'Avila beef, double minced daily',
-        180,
+        140,
         'baker''s bread',
         'Brie de Meaux, roasted cherry tomato, smoked ham from Ourense, basil mayo, thinly sliced onion, lollo rosso lettuce',
         NULL,
+        NULL,
         13.00,
+        5,
+        4.5,
+        4.5,
         '/img/010.png'
     ),
     (
@@ -250,10 +303,14 @@ VALUES (
         '002',
         'Organic Mushroom Burger',
         NULL,
-        'Brioche',
+        'Brioche (gluten-free bread available)',
         'Melted Havarti Cheese, Tomato, Truffled Mayonnaise',
         NULL,
+        'gluten, dairy',
         12.00,
+        4,
+        3.5,
+        4,
         '/img/011.png'
     ),
     (
@@ -262,10 +319,14 @@ VALUES (
         '002',
         '''Vaca Vieja'' Beef',
         NULL,
-        'Brioche',
+        'Brioche (gluten-free bread available)',
         'Smoked White Cheddar, Fresh Guacamole, Pico de Gallo, Chilli Mayo',
         'avocado, coriander, lime, cilantro',
+        'eggs, dairy, soy',
         13.50,
+        4.5,
+        4.5,
+        4,
         '/img/012.png'
     ),
     (
@@ -274,12 +335,33 @@ VALUES (
         '002',
         '''Vaca Vieja'' Beef',
         NULL,
-        'Brioche',
+        'Brioche (gluten-free bread available)',
         'Smoked White Cheddar, Txistorra Bits, Fried Egg, Crispy Straw Potatoes, ''Don Lucio'' Mayo',
         NULL,
+        'eggs, dairy, sulphites',
         13.90,
+        4.5,
+        4.5,
+        4,
         '/img/013.png'
+    ),
+    (
+        '014',
+        'La Vegana',
+        '010',
+        'Beyond meat',
+        NULL,
+        'arepa bread',
+        'hummus, pico de gallo',
+        'chickpeas, cumin, sesame seeds, coriander, tomato, onion, cilantro',
+        'tree nuts, sesame seeds',
+        14.20,
+        4,
+        3.5,
+        4,
+        '/img/014.png'
     );
+
 INSERT INTO
     users (
         id,
@@ -292,16 +374,17 @@ VALUES (
         1,
         'AtteneriCimadevilla',
         'attrodsan@alu.edu.gva.es',
-        '1234',
+        '123456',
         'admin'
     ),
     (
         2,
         'TestUser1',
         'testuser1@mail.com',
-        '1234',
+        '123456',
         'user'
     );
+
 INSERT INTO
     reviews (
         burger_id,
@@ -311,16 +394,17 @@ INSERT INTO
         quality_price_rating,
         comment
     )
-VALUES ('001', 1, 5, 4.5, 4.5, NULL),
-    ('002', 1, 5, 5, 4.5, NULL),
+VALUES ('001', 1, 5.0, 4.5, 4.5, NULL),
+    ('002', 1, 5.0, 5.0, 4.5, NULL),
     ('003', 1, 4.5, 4.5, 4.5, NULL),
-    ('004', 1, 4, 4, 4, NULL),
-    ('005', 1, 4, 3.5, 4, NULL),
-    ('006', 1, 5, 4.5, 4, NULL),
-    ('003.5', 1, 4, 4, 4, NULL),
-    ('004', 1, 4.5, 4.5, 4, NULL),
-    ('004.5', 1, 5, 4.5, 4.5, NULL),
-    ('05', 1, 5, 4.5, 4.5, NULL),
-    ('011', 1, 4, 3.5, 4, NULL),
-    ('012', 1, 4.5, 4.5, 4, NULL),
-    ('013', 1, 4.5, 4.5, 4, NULL);
+    ('004', 1, 4.0, 4.0, 4.0, NULL),
+    ('005', 1, 4.0, 3.5, 4.0, NULL),
+    ('006', 1, 5.0, 4.5, 4.0, NULL),
+    ('007', 1, 4.0, 4.0, 4.0, NULL),
+    ('008', 1, 4.5, 4.5, 4.0, NULL),
+    ('009', 1, 5.0, 4.5, 4.5, NULL),
+    ('010', 1, 5.0, 4.5, 4.5, NULL),
+    ('011', 1, 4.0, 3.5, 4.0, NULL),
+    ('012', 1, 4.5, 4.5, 4.0, NULL),
+    ('013', 1, 4.5, 4.5, 4.0, NULL),
+    ('014', 1, 4, 3.5, 4, NULL);

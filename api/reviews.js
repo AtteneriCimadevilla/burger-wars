@@ -33,37 +33,42 @@ export default async function handler(req, res) {
         args = [burger_id];
       } else if (user_id) {
         // Get reviews by a specific user (requires authentication)
-        const decoded = authenticateRequest(req);
+        try {
+          const decoded = authenticateRequest(req);
 
-        // Only allow users to see their own reviews
-        if (decoded.id !== Number.parseInt(user_id)) {
-          return res
-            .status(403)
-            .json({ error: "You can only view your own reviews" });
+          // Only allow users to see their own reviews
+          if (decoded.id !== Number.parseInt(user_id)) {
+            return res
+              .status(403)
+              .json({ error: "You can only view your own reviews" });
+          }
+
+          query = `
+           SELECT 
+             r.id,
+             r.burger_id,
+             r.user_id,
+             r.taste_rating,
+             r.presentation_rating,
+             r.quality_price_rating,
+             r.comment,
+             u.username,
+             b.name as burger_name,
+             b.image as burger_image,
+             rest.id as restaurant_id,
+             rest.name as restaurant_name
+           FROM reviews r
+           JOIN users u ON r.user_id = u.id
+           JOIN burgers b ON r.burger_id = b.id
+           JOIN restaurants rest ON b.restaurant_id = rest.id
+           WHERE r.user_id = ?
+           ORDER BY r.id DESC
+         `;
+          args = [user_id];
+        } catch (authError) {
+          console.error("Authentication error:", authError);
+          return res.status(401).json({ error: "Authentication required" });
         }
-
-        query = `
-         SELECT 
-           r.id,
-           r.burger_id,
-           r.user_id,
-           r.taste_rating,
-           r.presentation_rating,
-           r.quality_price_rating,
-           r.comment,
-           u.username,
-           b.name as burger_name,
-           b.image as burger_image,
-           rest.id as restaurant_id,
-           rest.name as restaurant_name
-         FROM reviews r
-         JOIN users u ON r.user_id = u.id
-         JOIN burgers b ON r.burger_id = b.id
-         JOIN restaurants rest ON b.restaurant_id = rest.id
-         WHERE r.user_id = ?
-         ORDER BY r.id DESC
-       `;
-        args = [user_id];
       } else {
         return res
           .status(400)
@@ -104,8 +109,20 @@ export default async function handler(req, res) {
     }
   } else if (req.method === "POST") {
     try {
+      // Log the request headers to debug authentication issues
+      console.log("Request headers:", req.headers);
+
       // Authenticate user
-      const decoded = authenticateRequest(req);
+      let decoded;
+      try {
+        decoded = authenticateRequest(req);
+        console.log("User authenticated successfully:", decoded);
+      } catch (authError) {
+        console.error("Authentication error:", authError);
+        return res
+          .status(401)
+          .json({ error: "Authentication required: " + authError.message });
+      }
 
       const {
         burger_id,
@@ -153,27 +170,39 @@ export default async function handler(req, res) {
           .json({ error: "You have already reviewed this burger" });
       }
 
-      const { lastInsertRowid } = await turso.execute({
-        sql: `
-         INSERT INTO reviews (burger_id, user_id, taste_rating, presentation_rating, quality_price_rating, comment)
-         VALUES (?, ?, ?, ?, ?, ?)
-       `,
-        args: [
-          burger_id,
-          decoded.id,
-          taste_rating,
-          presentation_rating,
-          quality_price_rating,
-          comment || null,
-        ],
-      });
+      // Insert the review
+      try {
+        const result = await turso.execute({
+          sql: `
+           INSERT INTO reviews (burger_id, user_id, taste_rating, presentation_rating, quality_price_rating, comment)
+           VALUES (?, ?, ?, ?, ?, ?)
+         `,
+          args: [
+            burger_id,
+            decoded.id,
+            taste_rating,
+            presentation_rating,
+            quality_price_rating,
+            comment || null,
+          ],
+        });
 
-      console.log("Review saved successfully with ID:", lastInsertRowid);
+        console.log(
+          "Review saved successfully with ID:",
+          Number(result.lastInsertRowid)
+        );
 
-      return res.status(201).json({
-        id: lastInsertRowid,
-        message: "Review created successfully",
-      });
+        return res.status(201).json({
+          id: Number(result.lastInsertRowid), // Convert BigInt to Number
+          message: "Review created successfully",
+        });
+      } catch (dbError) {
+        console.error("Database error when inserting review:", dbError);
+        return res.status(500).json({
+          error: "Database error when saving review",
+          details: dbError.message,
+        });
+      }
     } catch (err) {
       console.error("POST /api/reviews error:", err);
       if (

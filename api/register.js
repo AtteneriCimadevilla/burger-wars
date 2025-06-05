@@ -41,7 +41,10 @@ export default async function handler(req, res) {
       args: [username, email, hashedPassword, "user"],
     });
 
-    const userId = result.lastInsertRowid;
+    // Convert BigInt to Number to avoid serialization issues
+    const userId = Number(result.lastInsertRowid);
+
+    console.log("User created successfully with ID:", userId);
 
     // Generate token
     const token = generateToken({
@@ -57,6 +60,9 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({
+      error: "Internal Server Error",
+      details: error.message,
+    });
   }
 }
