@@ -7,18 +7,7 @@ export function useRestaurants() {
   const loading = ref(true);
 
   const processRestaurants = () => {
-    burgers.value.forEach((burger) => {
-      // Calculate rating from 0-5 scale
-      burger.rating =
-        Math.round(
-          ((burger.taste_rating +
-            burger.presentation_rating +
-            burger.quality_price_rating) /
-            3) *
-            100
-        ) / 100;
-    });
-
+    // Burgers now come with calculated ratings from the API
     restaurants.value.forEach((restaurant) => {
       const restaurantBurgers = burgers.value.filter(
         (burger) => burger.restaurant_id === restaurant.id
@@ -52,6 +41,8 @@ export function useRestaurants() {
 
       burgers.value = await burgersResponse.json();
       restaurants.value = await restaurantsResponse.json();
+
+      // Process restaurants with the new burger ratings
       processRestaurants();
     } catch (error_) {
       error.value = error_.message;

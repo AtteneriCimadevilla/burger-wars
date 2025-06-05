@@ -21,6 +21,7 @@ export function useRestaurant(static_id = null) {
       burgers.value = await burgersResponse.json();
       restaurant.value = await restaurantResponse.json();
 
+      // Calculate restaurant rating from burger ratings
       processRestaurant();
     } catch (error_) {
       error.value = error_.message;
@@ -30,18 +31,8 @@ export function useRestaurant(static_id = null) {
   };
 
   const processRestaurant = () => {
-    burgers.value.forEach((burger) => {
-      // Calculate rating from 0-5 scale
-      burger.rating =
-        Math.round(
-          ((burger.taste_rating +
-            burger.presentation_rating +
-            burger.quality_price_rating) /
-            3) *
-            100
-        ) / 100;
-    });
-
+    // Burgers now come with calculated ratings from the API
+    // Just calculate the restaurant's overall rating
     const totalRating = burgers.value.reduce(
       (sum, burger) => sum + burger.rating,
       0

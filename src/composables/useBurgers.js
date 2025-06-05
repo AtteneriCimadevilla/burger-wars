@@ -5,20 +5,7 @@ export function useBurgers() {
   const error = ref(null);
   const loading = ref(true);
 
-  const processBurgers = () => {
-    burgers.value.forEach((burger) => {
-      // Calculate rating from 0-5 scale
-      burger.rating =
-        Math.round(
-          ((burger.taste_rating +
-            burger.presentation_rating +
-            burger.quality_price_rating) /
-            3) *
-            100
-        ) / 100;
-    });
-  };
-
+  // No need to process burgers here anymore since ratings come from API
   const sortedBurgers = computed(() =>
     [...burgers.value].sort((a, b) => b.rating - a.rating)
   );
@@ -32,7 +19,7 @@ export function useBurgers() {
       }
 
       burgers.value = await burgersResponse.json();
-      processBurgers();
+      // Ratings are now calculated in the API, no processing needed here
     } catch (error_) {
       error.value = error_.message;
     } finally {
