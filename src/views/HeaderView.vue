@@ -10,7 +10,7 @@ const { isAuthenticated, logout } = useAuth();
         <RouterLink to="/">
             <img class="logo" src="/img/logo.png" alt="Home" />
         </RouterLink>
-        
+
         <MenuComponent />
     </header>
 </template>
@@ -25,14 +25,33 @@ header {
     background-color: var(--accent-color-2);
     padding: 10px 20px;
 }
+
 .logo {
     height: 15vh;
     margin-left: 20px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
     header {
-        padding: 0 30px;
+        padding: 0 15px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    header {
+        padding: 0 10px;
+    }
+
+    .logo {
+        height: 12vh;
+        margin-left: 10px;
+    }
+}
+
+@media only screen and (max-width: 380px) {
+    .logo {
+        height: 10vh;
+        margin-left: 5px;
     }
 }
 </style>

@@ -473,6 +473,13 @@ const getRestaurantImage = (restaurantId) => {
 
     .info-content {
         justify-content: center;
+        max-width: 100%;
+    }
+
+    .info-block {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .restaurant-block .info-image {
@@ -486,7 +493,76 @@ const getRestaurantImage = (restaurantId) => {
     }
 
     .ratings-block {
+        justify-content: center !important;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .review-card {
+        padding: 1rem;
+    }
+
+    .review-content {
+        padding: 0.75rem;
+    }
+
+    .review-actions {
         justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-name {
+        max-width: 100%;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+
+    .rating-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .rating-label {
+        text-align: center;
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .edit-btn,
+    .save-btn,
+    .cancel-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .review-card {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .review-card {
+        padding: 0.5rem;
+    }
+
+    .ratings-block {
+        padding: 0.25rem;
+    }
+
+    .info-block {
+        padding: 0.5rem;
+    }
+
+    .info-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    .restaurant-block .info-image {
+        width: 40px;
+        height: 40px;
     }
 }
 </style>
