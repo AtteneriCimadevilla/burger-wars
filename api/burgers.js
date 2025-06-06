@@ -22,6 +22,8 @@ export default async function handler(req, res) {
           b.allergens,
           b.price,
           b.image,
+          b.vegetarian,
+          b.vegan,
           COALESCE(AVG(r.taste_rating), 0) as taste_rating,
           COALESCE(AVG(r.presentation_rating), 0) as presentation_rating,
           COALESCE(AVG(r.quality_price_rating), 0) as quality_price_rating,
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
         FROM burgers b
         LEFT JOIN reviews r ON b.id = r.burger_id
         WHERE b.id = ?
-        GROUP BY b.id, b.name, b.restaurant_id, b.main_ingredient, b.amount, b.bread, b.ingredients, b.more_ingredients, b.allergens, b.price, b.image
+        GROUP BY b.id, b.name, b.restaurant_id, b.main_ingredient, b.amount, b.bread, b.ingredients, b.more_ingredients, b.allergens, b.price, b.image, b.vegetarian, b.vegan
       `;
       args.push(id);
     }
@@ -48,6 +50,8 @@ export default async function handler(req, res) {
           b.allergens,
           b.price,
           b.image,
+          b.vegetarian,
+          b.vegan,
           COALESCE(AVG(r.taste_rating), 0) as taste_rating,
           COALESCE(AVG(r.presentation_rating), 0) as presentation_rating,
           COALESCE(AVG(r.quality_price_rating), 0) as quality_price_rating,
@@ -55,7 +59,7 @@ export default async function handler(req, res) {
         FROM burgers b
         LEFT JOIN reviews r ON b.id = r.burger_id
         WHERE b.restaurant_id = ?
-        GROUP BY b.id, b.name, b.restaurant_id, b.main_ingredient, b.amount, b.bread, b.ingredients, b.more_ingredients, b.allergens, b.price, b.image
+        GROUP BY b.id, b.name, b.restaurant_id, b.main_ingredient, b.amount, b.bread, b.ingredients, b.more_ingredients, b.allergens, b.price, b.image, b.vegetarian, b.vegan
       `;
       args.push(restaurant_id);
     }
@@ -74,13 +78,15 @@ export default async function handler(req, res) {
           b.allergens,
           b.price,
           b.image,
+          b.vegetarian,
+          b.vegan,
           COALESCE(AVG(r.taste_rating), 0) as taste_rating,
           COALESCE(AVG(r.presentation_rating), 0) as presentation_rating,
           COALESCE(AVG(r.quality_price_rating), 0) as quality_price_rating,
           COUNT(r.id) as review_count
         FROM burgers b
         LEFT JOIN reviews r ON b.id = r.burger_id
-        GROUP BY b.id, b.name, b.restaurant_id, b.main_ingredient, b.amount, b.bread, b.ingredients, b.more_ingredients, b.allergens, b.price, b.image
+        GROUP BY b.id, b.name, b.restaurant_id, b.main_ingredient, b.amount, b.bread, b.ingredients, b.more_ingredients, b.allergens, b.price, b.image, b.vegetarian, b.vegan
       `;
     }
 
@@ -103,12 +109,14 @@ export default async function handler(req, res) {
         more_ingredients: row[7],
         allergens: row[8],
         price: row[9],
-        image: row[10], // This should now be in the correct position
+        image: row[10],
+        vegetarian: row[11],
+        vegan: row[12],
         // Dynamic ratings from reviews
-        taste_rating: Math.round(row[11] * 100) / 100, // Round to 2 decimal places
-        presentation_rating: Math.round(row[12] * 100) / 100,
-        quality_price_rating: Math.round(row[13] * 100) / 100,
-        review_count: row[14],
+        taste_rating: Math.round(row[13] * 100) / 100, // Round to 2 decimal places
+        presentation_rating: Math.round(row[14] * 100) / 100,
+        quality_price_rating: Math.round(row[15] * 100) / 100,
+        review_count: row[16],
       };
 
       // Calculate overall rating as average of the three ratings

@@ -8,25 +8,56 @@ const search = ref('');
 // Filter states
 const activeIngredientFilters = ref([]);
 const activeAllergenFilters = ref([]);
+const activeDietaryFilters = ref([]);
 
 // Available filter options
 const ingredientFilters = [
+    { id: 'beef', label: 'Beef' },
+    { id: 'pork', label: 'Pork' },
+    { id: 'chicken', label: 'Chicken' },
     { id: 'cheese', label: 'Cheese' },
-    { id: 'bacon', label: 'Bacon' }
+    { id: 'bacon', label: 'Bacon' },
+];
+
+const dietaryFilters = [
+    { id: 'vegetarian', label: 'Vegetarian' },
+    { id: 'vegan', label: 'Vegan' }
 ];
 
 const allergenFilters = [
     { id: 'gluten', label: 'Gluten Free' },
+    { id: 'crustaceans', label: 'Crustaceans Free' },
+    { id: 'eggs', label: 'Eggs Free' },
+    { id: 'fish', label: 'Fish Free' },
+    { id: 'peanuts', label: 'Peanuts Free' },
+    { id: 'soy', label: 'Soy Free' },
     { id: 'dairy', label: 'Dairy Free' },
-    { id: 'nuts', label: 'Nuts Free' },
-    { id: 'sesame', label: 'Sesame Free' }
+    { id: 'tree-nuts', label: 'Tree Nuts Free' },
+    { id: 'celery', label: 'Celery Free' },
+    { id: 'mustard', label: 'Mustard Free' },
+    { id: 'sesame', label: 'Sesame Free' },
+    { id: 'sulphites', label: 'Sulphites Free' },
+    { id: 'lupin', label: 'Lupin Free' },
+    { id: 'molluscs', label: 'Molluscs Free' }
 ];
 
 const { sortedBurgers, error, loading, loadBurgers } = useBurgers();
 
 // Toggle filter function
 const toggleFilter = (filterId, filterType) => {
-    const filterArray = filterType === 'ingredient' ? activeIngredientFilters : activeAllergenFilters;
+    let filterArray;
+
+    switch (filterType) {
+        case 'ingredient':
+            filterArray = activeIngredientFilters;
+            break;
+        case 'dietary':
+            filterArray = activeDietaryFilters;
+            break;
+        case 'allergen':
+            filterArray = activeAllergenFilters;
+            break;
+    }
 
     if (filterArray.value.includes(filterId)) {
         filterArray.value = filterArray.value.filter(id => id !== filterId);
@@ -44,7 +75,20 @@ const containsIngredient = (text, ingredient) => {
 // Check if burger has ingredient
 const burgerHasIngredient = (burger, ingredient) => {
     return containsIngredient(burger.ingredients, ingredient) ||
-        containsIngredient(burger.more_ingredients, ingredient);
+        containsIngredient(burger.more_ingredients, ingredient) ||
+        containsIngredient(burger.main_ingredient, ingredient);
+};
+
+// Check if burger meets dietary requirement
+const burgerMeetsDietaryRequirement = (burger, requirement) => {
+    switch (requirement) {
+        case 'vegetarian':
+            return burger.vegetarian === 1 || burger.vegetarian === true;
+        case 'vegan':
+            return burger.vegan === 1 || burger.vegan === true;
+        default:
+            return true;
+    }
 };
 
 // Check if burger is free of allergen
@@ -54,12 +98,31 @@ const burgerIsFreeOfAllergen = (burger, allergen) => {
         return false; // If no allergen info, we can't confirm it's allergen-free
     }
 
+    // Map filter IDs to allergen names that might appear in the allergens field
+    const allergenMap = {
+        'gluten': 'gluten',
+        'crustaceans': 'crustaceans',
+        'eggs': 'egg',
+        'fish': 'fish',
+        'peanuts': 'peanut',
+        'soy': 'soy',
+        'dairy': 'dairy',
+        'tree-nuts': 'nuts',
+        'celery': 'celery',
+        'mustard': 'mustard',
+        'sesame': 'sesame',
+        'sulphites': 'sulphite',
+        'lupin': 'lupin',
+        'molluscs': 'mollusc'
+    };
+
+    const allergenName = allergenMap[allergen] || allergen;
+
     // Then check if the allergen is NOT mentioned in the allergens field
-    return !containsIngredient(burger.allergens, allergen);
+    return !containsIngredient(burger.allergens, allergenName);
 };
 
 const filteredBurgers = computed(() => {
-    // Use sortedBurgers directly from the composable
     return sortedBurgers.value.filter(burger => {
         // Apply text search filter
         const textMatch = search.value === '' ||
@@ -77,6 +140,12 @@ const filteredBurgers = computed(() => {
 
         if (!ingredientMatch) return false;
 
+        // Apply dietary filters
+        const dietaryMatch = activeDietaryFilters.value.length === 0 ||
+            activeDietaryFilters.value.every(dietary => burgerMeetsDietaryRequirement(burger, dietary));
+
+        if (!dietaryMatch) return false;
+
         // Apply allergen filters
         const allergenMatch = activeAllergenFilters.value.length === 0 ||
             activeAllergenFilters.value.every(allergen => burgerIsFreeOfAllergen(burger, allergen));
@@ -90,16 +159,25 @@ const getFilterMatchCount = (filterId, filterType) => {
     // Create a temporary array with the filter added
     let tempFilters;
 
-    if (filterType === 'ingredient') {
-        tempFilters = [...activeIngredientFilters.value];
-        if (!tempFilters.includes(filterId)) {
-            tempFilters.push(filterId);
-        }
-    } else {
-        tempFilters = [...activeAllergenFilters.value];
-        if (!tempFilters.includes(filterId)) {
-            tempFilters.push(filterId);
-        }
+    switch (filterType) {
+        case 'ingredient':
+            tempFilters = [...activeIngredientFilters.value];
+            if (!tempFilters.includes(filterId)) {
+                tempFilters.push(filterId);
+            }
+            break;
+        case 'dietary':
+            tempFilters = [...activeDietaryFilters.value];
+            if (!tempFilters.includes(filterId)) {
+                tempFilters.push(filterId);
+            }
+            break;
+        case 'allergen':
+            tempFilters = [...activeAllergenFilters.value];
+            if (!tempFilters.includes(filterId)) {
+                tempFilters.push(filterId);
+            }
+            break;
     }
 
     // Count burgers that would match with this filter applied
@@ -120,6 +198,13 @@ const getFilterMatchCount = (filterId, filterType) => {
             ingredientFiltersToApply.every(ingredient => burgerHasIngredient(burger, ingredient));
 
         if (!ingredientMatch) return false;
+
+        // Apply dietary filters
+        const dietaryFiltersToApply = filterType === 'dietary' ? tempFilters : activeDietaryFilters.value;
+        const dietaryMatch = dietaryFiltersToApply.length === 0 ||
+            dietaryFiltersToApply.every(dietary => burgerMeetsDietaryRequirement(burger, dietary));
+
+        if (!dietaryMatch) return false;
 
         // Apply allergen filters
         const allergenFiltersToApply = filterType === 'allergen' ? tempFilters : activeAllergenFilters.value;
@@ -144,27 +229,45 @@ onMounted(() => {
         </div>
 
         <div class="filters-container">
-            <div class="filter-section">
-                <h4>Dietary Options:</h4>
-                <div class="filter-buttons">
-                    <button v-for="filter in allergenFilters" :key="filter.id" class="filter-button"
-                        :class="{ active: activeAllergenFilters.includes(filter.id) }"
-                        @click="toggleFilter(filter.id, 'allergen')">
-                        {{ filter.label }}
-                        <span class="count">({{ getFilterMatchCount(filter.id, 'allergen') }})</span>
-                    </button>
+            <!-- First Row: Dietary Options and Ingredients -->
+            <div class="filter-row">
+                <div class="filter-section">
+                    <h4>Dietary Options:</h4>
+                    <div class="filter-buttons">
+                        <button v-for="filter in dietaryFilters" :key="filter.id" class="filter-button"
+                            :class="{ active: activeDietaryFilters.includes(filter.id) }"
+                            @click="toggleFilter(filter.id, 'dietary')">
+                            {{ filter.label }}
+                            <span class="count">({{ getFilterMatchCount(filter.id, 'dietary') }})</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Ingredients:</h4>
+                    <div class="filter-buttons">
+                        <button v-for="filter in ingredientFilters" :key="filter.id" class="filter-button"
+                            :class="{ active: activeIngredientFilters.includes(filter.id) }"
+                            @click="toggleFilter(filter.id, 'ingredient')">
+                            {{ filter.label }}
+                            <span class="count">({{ getFilterMatchCount(filter.id, 'ingredient') }})</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="filter-section">
-                <h4>Ingredients:</h4>
-                <div class="filter-buttons">
-                    <button v-for="filter in ingredientFilters" :key="filter.id" class="filter-button"
-                        :class="{ active: activeIngredientFilters.includes(filter.id) }"
-                        @click="toggleFilter(filter.id, 'ingredient')">
-                        {{ filter.label }}
-                        <span class="count">({{ getFilterMatchCount(filter.id, 'ingredient') }})</span>
-                    </button>
+            <!-- Second Row: Allergens -->
+            <div class="filter-row allergen-row">
+                <div class="filter-section full-width">
+                    <h4>Allergens:</h4>
+                    <div class="filter-buttons allergen-grid">
+                        <button v-for="filter in allergenFilters" :key="filter.id" class="filter-button allergen-button"
+                            :class="{ active: activeAllergenFilters.includes(filter.id) }"
+                            @click="toggleFilter(filter.id, 'allergen')">
+                            {{ filter.label }}
+                            <span class="count">({{ getFilterMatchCount(filter.id, 'allergen') }})</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -237,13 +340,27 @@ onMounted(() => {
     background-color: var(--accent-color-1);
     border: 2px solid var(--accent-color-2);
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.filter-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
+.allergen-row {
+    grid-template-columns: 1fr;
+}
+
 .filter-section {
     margin-bottom: 0;
+}
+
+.filter-section.full-width {
+    width: 100%;
 }
 
 .filter-section h4 {
@@ -257,6 +374,12 @@ onMounted(() => {
     gap: 10px;
 }
 
+.allergen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
 .filter-button {
     padding: 6px 12px;
     background-color: var(--background-color);
@@ -266,6 +389,11 @@ onMounted(() => {
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s ease;
+}
+
+.allergen-button {
+    font-size: 0.75rem;
+    padding: 4px 8px;
 }
 
 .filter-button:hover {
@@ -346,6 +474,9 @@ onMounted(() => {
 
     .filters-container {
         margin: 0 20px 20px 20px;
+    }
+
+    .filter-row {
         grid-template-columns: 1fr;
         gap: 15px;
     }
@@ -357,6 +488,16 @@ onMounted(() => {
     .filter-button {
         padding: 5px 10px;
         font-size: 0.8rem;
+    }
+
+    .allergen-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 6px;
+    }
+
+    .allergen-button {
+        font-size: 0.7rem;
+        padding: 3px 6px;
     }
 }
 
