@@ -145,7 +145,7 @@ VALUES (
         NULL,
         'potato roll',
         'thin pickle slices',
-        NULL,
+        'beef',
         NULL,
         15.00,
         5,
@@ -162,7 +162,7 @@ VALUES (
         'brioche',
         'provolone cheese, caramelised in cocacola onion, Italian guanciale',
         NULL,
-        NULL,
+        'pork',
         11.00,
         5,
         5,
@@ -209,7 +209,7 @@ VALUES (
         NULL,
         'burger bun',
         'cheddar cheese, bacon, lettuce, tomato, grilled onion',
-        NULL,
+        'pork',
         'gluten, eggs, soy, dairy, mustard, sesame seeds',
         12.50,
         4,
@@ -241,7 +241,7 @@ VALUES (
         NULL,
         'artisanal bread',
         'smoked cheese, bacon, chipotle cream, crunchy onion, mesclun, tomato, honey mustard sauce',
-        NULL,
+        'pork',
         NULL,
         13.50,
         4,
@@ -257,7 +257,7 @@ VALUES (
         NULL,
         'artisanal bread',
         'bourbon sauce, emmenthal cheese, blue cheese, bacon, mesclun, honey mustard sauce, tomato',
-        NULL,
+        'pork',
         NULL,
         12.50,
         4.5,
@@ -289,7 +289,7 @@ VALUES (
         140,
         'baker''s bread',
         'Brie de Meaux, roasted cherry tomato, smoked ham from Ourense, basil mayo, thinly sliced onion, lollo rosso lettuce',
-        NULL,
+        'pork, cheese',
         NULL,
         13.00,
         5,
@@ -321,7 +321,7 @@ VALUES (
         NULL,
         'Brioche (gluten-free bread available)',
         'Smoked White Cheddar, Fresh Guacamole, Pico de Gallo, Chilli Mayo',
-        'avocado, coriander, lime, cilantro',
+        'avocado, coriander, lime, cilantro, cheese',
         'eggs, dairy, soy',
         13.50,
         4.5,
@@ -337,7 +337,7 @@ VALUES (
         NULL,
         'Brioche (gluten-free bread available)',
         'Smoked White Cheddar, Txistorra Bits, Fried Egg, Crispy Straw Potatoes, ''Don Lucio'' Mayo',
-        NULL,
+        'pork, cheese',
         'eggs, dairy, sulphites',
         13.90,
         4.5,
@@ -361,6 +361,14 @@ VALUES (
         4,
         '/img/014.png'
     );
+
+UPDATE burgers
+SET
+    vegetarian = TRUE
+WHERE
+    id IN ('011', '014');
+
+UPDATE burgers SET vegan = TRUE WHERE id = '014';
 
 INSERT INTO
     users (
