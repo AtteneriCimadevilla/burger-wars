@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS burgers (
     presentation_rating REAL,
     quality_price_rating REAL,
     image TEXT,
+    vegetarian BOOLEAN DEFAULT 0,
+    vegan BOOLEAN DEFAULT 0,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON UPDATE CASCADE
 );
 CREATE TABLE IF NOT EXISTS users (
