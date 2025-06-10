@@ -50,6 +50,10 @@ const handleReviewUpdated = (updatedReview) => {
     }
 };
 
+const handleReviewDeleted = (reviewId) => {
+    reviews.value = reviews.value.filter(r => r.id !== reviewId);
+};
+
 // Check if current user has already reviewed this burger
 const userReview = computed(() => {
     if (!isAuthenticated.value || !user.value) return null;
@@ -110,7 +114,8 @@ onMounted(async () => {
             <!-- User's own review (if exists) -->
             <div v-if="userReview" class="user-review-section">
                 <ReviewsComponent :reviews="[userReview]" :showBurgerInfo="false" :showRestaurantInfo="false"
-                    :showAuthor="true" :canEdit="true" @reviewUpdated="handleReviewUpdated" />
+                    :showAuthor="true" :canEdit="true" @reviewUpdated="handleReviewUpdated"
+                    @reviewDeleted="handleReviewDeleted" />
             </div>
 
             <!-- Review form (only if user can write a review) -->
@@ -121,7 +126,7 @@ onMounted(async () => {
                 <div v-if="reviewsLoading" class="loading">Loading reviews...</div>
                 <div v-else-if="reviewsError" class="error">{{ reviewsError }}</div>
                 <ReviewsComponent v-else :reviews="otherReviews" :showBurgerInfo="false" :canEdit="false"
-                    @reviewUpdated="handleReviewUpdated" />
+                    @reviewUpdated="handleReviewUpdated" @reviewDeleted="handleReviewDeleted" />
             </div>
 
             <!-- No reviews message -->
@@ -269,6 +274,10 @@ onMounted(async () => {
 }
 
 @media only screen and (max-width: 500px) {
+    .burgerView {
+        width: 95%;
+    }
+
     .burgerMain {
         grid-template-columns: 1fr;
     }
@@ -286,6 +295,25 @@ onMounted(async () => {
     }
 }
 
+@media only screen and (max-width: 380px) {
+    .burgerView {
+        width: 98%;
+    }
+
+    .reviews-container {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .burgerMain {
+        margin: 10px;
+    }
+
+    .restaurantInfo {
+        margin: 10px;
+    }
+}
+
 @media only screen and (min-width: 1024px) {
     .burgerView {
         display: grid;
@@ -293,6 +321,7 @@ onMounted(async () => {
         grid-template-areas:
             "main restaurant"
             "reviews reviews";
+        width: 90%;
     }
 
     .burgerMain {
@@ -301,11 +330,13 @@ onMounted(async () => {
 
     .restaurantInfo {
         grid-area: restaurant;
+        max-width: 300px;
     }
 
     .reviews-container {
         grid-area: reviews;
         grid-column: 1 / -1;
+        margin: 20px 0;
     }
 }
 </style>

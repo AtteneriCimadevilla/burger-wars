@@ -145,6 +145,10 @@ const handleReviewUpdated = (updatedReview) => {
     }
 };
 
+const handleReviewDeleted = (reviewId) => {
+    reviews.value = reviews.value.filter(r => r.id !== reviewId);
+};
+
 const averageRating = computed(() => {
     if (reviews.value.length === 0) return 0;
     const total = reviews.value.reduce((sum, review) => {
@@ -257,7 +261,7 @@ const averageRating = computed(() => {
             <div v-else-if="error" class="error">{{ error }}</div>
             <ReviewsComponent v-else :reviews="reviews" :canEdit="true" :showBurgerInfo="true"
                 :showRestaurantInfo="true" :showAuthor="false" :showAverageRating="false" :compactRatings="true"
-                :profileLayout="true" @reviewUpdated="handleReviewUpdated" />
+                :profileLayout="true" @reviewUpdated="handleReviewUpdated" @reviewDeleted="handleReviewDeleted" />
         </div>
     </div>
 </template>
@@ -453,13 +457,13 @@ const averageRating = computed(() => {
 }
 
 .error-message {
-    color: #dc3545;
+    color: var(--logo-color);
     font-size: 0.9rem;
     margin-top: 0.5rem;
 }
 
 .success-message {
-    color: #28a745;
+    color: var(--accent-color-2);
     font-size: 0.9rem;
     margin-top: 0.5rem;
 }

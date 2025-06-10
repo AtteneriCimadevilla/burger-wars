@@ -3,9 +3,6 @@ import { ref, computed } from 'vue';
 import StarRating from '@/components/StarRating.vue';
 import useAuth from '@/composables/useAuth';
 
-const useAuthHook = useAuth();
-const { isAuthenticated, user } = useAuthHook;
-
 const props = defineProps({
     reviews: {
         type: Array,
@@ -41,10 +38,14 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['reviewUpdated']);
+const emit = defineEmits(['reviewUpdated', 'reviewDeleted']);
 
 const editingReview = ref(null);
 const error = ref('');
+const deleteLoading = ref(false);
+
+const useAuthHook = useAuth();
+const { isAuthenticated, user } = useAuthHook;
 
 const startEditingReview = (review) => {
     editingReview.value = {
@@ -58,6 +59,7 @@ const startEditingReview = (review) => {
 
 const cancelEditingReview = () => {
     editingReview.value = null;
+    error.value = '';
 };
 
 const saveReview = async (reviewId) => {
@@ -93,9 +95,45 @@ const saveReview = async (reviewId) => {
         });
 
         editingReview.value = null;
+        error.value = '';
     } catch (err) {
         error.value = err.message;
         console.error('Review update error:', err);
+    }
+};
+
+const deleteReview = async (reviewId) => {
+    if (!confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
+        return;
+    }
+
+    deleteLoading.value = true;
+    error.value = '';
+
+    try {
+        const response = await fetch('/api/delete-review', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+            },
+            body: JSON.stringify({ reviewId }),
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to delete review');
+        }
+
+        // Emit event to parent component to remove the review
+        emit('reviewDeleted', reviewId);
+
+        editingReview.value = null;
+    } catch (err) {
+        error.value = err.message;
+        console.error('Review delete error:', err);
+    } finally {
+        deleteLoading.value = false;
     }
 };
 
@@ -211,6 +249,10 @@ const getRestaurantImage = (restaurantId) => {
                     </button>
                     <button v-if="editingReview?.id === review.id" @click="cancelEditingReview" class="cancel-btn">
                         Cancel
+                    </button>
+                    <button v-if="editingReview?.id === review.id" @click="deleteReview(review.id)"
+                        :disabled="deleteLoading" class="delete-btn">
+                        {{ deleteLoading ? 'Deleting...' : 'Delete' }}
                     </button>
                     <button v-else @click="startEditingReview(review)" class="edit-btn">
                         Edit
@@ -413,41 +455,69 @@ const getRestaurantImage = (restaurantId) => {
 
 .edit-btn,
 .save-btn,
-.cancel-btn {
+.cancel-btn,
+.delete-btn {
     padding: 0.5rem 1rem;
-    border: 2px solid var(--accent-color-2);
+    border: 2px solid;
     border-radius: 5px;
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .edit-btn {
     background: var(--accent-color-2);
     color: var(--accent-color-1);
+    border-color: var(--accent-color-2);
+}
+
+.edit-btn:hover {
+    background: var(--accent-color-1);
+    color: var(--accent-color-2);
 }
 
 .save-btn {
-    background: #28a745;
-    color: white;
-    border-color: #28a745;
+    background: var(--accent-color-1);
+    color: var(--accent-color-2);
+    border-color: var(--accent-color-2);
+}
+
+.save-btn:hover {
+    background: var(--accent-color-2);
+    color: var(--accent-color-1);
 }
 
 .cancel-btn {
-    background: #dc3545;
-    color: white;
-    border-color: #dc3545;
+    background: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
 }
 
-.edit-btn:hover,
-.save-btn:hover,
 .cancel-btn:hover {
-    opacity: 0.8;
+    background: var(--text-color);
+    color: var(--background-color);
+}
+
+.delete-btn {
+    background: var(--logo-color);
+    color: var(--background-color);
+    border-color: var(--logo-color);
+}
+
+.delete-btn:hover:not(:disabled) {
+    background: var(--background-color);
+    color: var(--logo-color);
+}
+
+.delete-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* Error and Empty States */
 .error-message {
-    color: #dc3545;
+    color: var(--logo-color);
     font-size: 0.9rem;
     margin-top: 0.5rem;
     text-align: center;
@@ -508,6 +578,7 @@ const getRestaurantImage = (restaurantId) => {
 
     .review-actions {
         justify-content: center;
+        flex-wrap: wrap;
     }
 }
 
@@ -532,9 +603,10 @@ const getRestaurantImage = (restaurantId) => {
 
     .edit-btn,
     .save-btn,
-    .cancel-btn {
+    .cancel-btn,
+    .delete-btn {
         padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     .review-card {
@@ -563,6 +635,14 @@ const getRestaurantImage = (restaurantId) => {
     .restaurant-block .info-image {
         width: 40px;
         height: 40px;
+    }
+
+    .edit-btn,
+    .save-btn,
+    .cancel-btn,
+    .delete-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
     }
 }
 </style>
